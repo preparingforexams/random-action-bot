@@ -12,7 +12,7 @@ COPY [ "poetry.toml", "poetry.lock", "pyproject.toml", "./" ]
 
 RUN poetry install --only main
 
-COPY bot/ .
+COPY bot/ bot/
 COPY main.py main.py
 
 ENTRYPOINT [ "python", "main.py" ]
