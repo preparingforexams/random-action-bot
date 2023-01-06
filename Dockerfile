@@ -17,8 +17,8 @@ RUN poetry config virtualenvs.create false
 
 COPY [ "poetry.toml", "poetry.lock", "pyproject.toml", "./" ]
 
-RUN poetry install --no-dev
+RUN poetry install --only main
 
-COPY src .
+COPY bot/ .
 
 ENTRYPOINT [ "python"]
