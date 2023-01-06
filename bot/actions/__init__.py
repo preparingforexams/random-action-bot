@@ -20,7 +20,7 @@ def escape_markdown(text: str) -> str:
 
 
 def action_hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
-    return "Hello World!"
+    return escape_markdown("Hello World!")
 
 
 class RequestError(Exception):
