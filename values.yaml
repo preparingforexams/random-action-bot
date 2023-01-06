@@ -1,0 +1,25 @@
+namespace: telegram-bots
+
+deployment:
+  name: randomactionbot
+  image: ghcr.io/preparingforexams/random-action-bot:__TAG__
+  imagePullPolicy: IfNotPresent
+  revisionHistoryLimit: 1
+  replicas: 1
+  labels:
+    app: randomactionbot
+  requests:
+    cpu: 50m
+    memory: 50Mi
+  limits:
+    cpu: 300m
+    memory: 300Mi
+  updateStrategy: Recreate
+
+secret:
+  name: random-action-bot
+  botToken: __TELEGRAM_TOKEN__
+  apiNinjasKey: __API_NINJAS_KEY__
+
+configmap:
+  name: random-action-bot
