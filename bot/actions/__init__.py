@@ -1,5 +1,6 @@
 import inspect
 import os
+import random
 import socket
 from typing import Dict, Optional
 
@@ -19,8 +20,11 @@ def escape_markdown(text: str) -> str:
     return text
 
 
-def action_hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
-    return escape_markdown("Hello World!")
+def action_random_phrase(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+    return escape_markdown(random.choice([
+        "Hello World!",
+        "This command is not supported",
+    ]))
 
 
 class RequestError(Exception):
