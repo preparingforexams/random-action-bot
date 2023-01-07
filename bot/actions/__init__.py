@@ -131,8 +131,8 @@ def action_apininjas_trivia(update: Update, context: ContextTypes.DEFAULT_TYPE):
         answer = escape_markdown(res[0]["answer"])
         return f"""{question}
 
-        ||{answer}||
-        """
+||{answer}||
+"""
 
 
 def action_apininjas_weather(update: Update, context: ContextTypes.DEFAULT_TYPE):
