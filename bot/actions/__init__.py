@@ -115,3 +115,20 @@ def action_apininjas_quotes(update: Update, context: ContextTypes.DEFAULT_TYPE):
         author = escape_markdown(res[0]["author"])
         return fr""""{quote}"
 \- _{author}_"""
+
+
+def action_apininjas_trivia(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    url = "https://api.api-ninjas.com/v1/trivia?limit=1"
+    api_ninjas_key = os.getenv("API_NINJAS_KEY")
+
+    try:
+        res = get_json_from_url(url, headers={"X-Api-Key": api_ninjas_key})
+    except RequestError as e:
+        return escape_markdown("\n".join(e.args))
+    if res:
+        question = escape_markdown(res[0]["question"])
+        answer = escape_markdown(res[0]["answer"])
+        return f"""{question}
+
+        ||{answer}||
+        """
