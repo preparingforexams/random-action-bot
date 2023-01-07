@@ -76,3 +76,16 @@ def action_apininjas_facts(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return escape_markdown("\n".join(e.args))
     if res:
         return escape_markdown(res[0]["fact"])
+
+
+def action_apininjas_chuck_norris(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # using `min_weight=0` results in a `Internal Server Error` every time
+    url = "https://api.api-ninjas.com/v1/chucknorris"
+    api_ninjas_key = os.getenv("API_NINJAS_KEY")
+
+    try:
+        res = get_json_from_url(url, headers={"X-Api-Key": api_ninjas_key})
+    except RequestError as e:
+        return escape_markdown("\n".join(e.args))
+    if res:
+        return escape_markdown(res["joke"])
