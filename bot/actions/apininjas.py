@@ -4,6 +4,7 @@ from typing import Dict, List, Optional
 from .utils import get_json_from_url
 
 
+# https://api-ninjas.com/api
 class ApiNinjas:
     base_url: str = "https://api.api-ninjas.com/v1"
 
