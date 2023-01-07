@@ -4,6 +4,7 @@ import random
 import socket
 from typing import Dict, Optional
 
+import geonamescache as geonamescache
 import requests
 import urllib3 as urllib3
 from telegram import Update
@@ -132,3 +133,24 @@ def action_apininjas_trivia(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         ||{answer}||
         """
+
+
+def action_apininjas_weather(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    city = random.choice(list(geonamescache.GeonamesCache().get_cities().items()))[1]
+    url = f"https://api.api-ninjas.com/v1/weather?lat={city['latitude']}&lon={city['longitude']}"
+    api_ninjas_key = os.getenv("API_NINJAS_KEY")
+
+    try:
+        res = get_json_from_url(url, headers={"X-Api-Key": api_ninjas_key})
+    except RequestError as e:
+        return escape_markdown("\n".join(e.args))
+    if res:
+        temperature = res["temp"]
+        city_name = escape_markdown(city["name"])
+        country_name = escape_markdown(city["countrycode"])
+        population = city["population"]
+        timezone = escape_markdown(city["timezone"])
+        return f"""It's {temperature} °C in {city_name}/{country_name}
+Population: {population}
+Timezone: {timezone}
+"""

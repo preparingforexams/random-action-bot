@@ -49,6 +49,18 @@ files = [
 unicode-backport = ["unicodedata2"]
 
 [[package]]
+name = "geonamescache"
+version = "1.5.0"
+description = "Geonames data for continents, cities and US states."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "geonamescache-1.5.0-py3-none-any.whl", hash = "sha256:b3af27801a42c636aaa48d978868c2698a765b5a4b2ad845e41cb68d3d010a64"},
+    {file = "geonamescache-1.5.0.tar.gz", hash = "sha256:8961055e8e9094d8c2c68610d7f6e23787be7eeb68149b2da45987a36b4b9ba5"},
+]
+
+[[package]]
 name = "h11"
 version = "0.14.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
@@ -215,4 +227,4 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "44c256bea68753cbae304d27e3f1e0cc29186f9232e95d9a8fd844db6164e56c"
+content-hash = "9f7f86c3856c21840ca77dd99dc524ed7f7517f606d844776bb606614408eacc"
