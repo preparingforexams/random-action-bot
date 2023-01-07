@@ -1,44 +1,14 @@
 import inspect
 import os
 import random
-import socket
-from typing import Dict, Optional
 
 import geonamescache as geonamescache
-import requests
-import urllib3 as urllib3
 from telegram import Update
 from telegram.ext import ContextTypes
 
+from .apininjas import ApiNinjas
+from .utils import escape_markdown, get_json_from_url, RequestError
 from ..logger import create_logger
-
-
-def escape_markdown(text: str) -> str:
-    reserved_characters = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
-    for reserved in reserved_characters:
-        text = text.replace(reserved, fr"\{reserved}")
-
-    return text
-
-
-class RequestError(Exception):
-    pass
-
-
-def get_json_from_url(url: str, *, headers: Dict = None) -> Optional[Dict]:
-    log = create_logger(inspect.currentframe().f_code.co_name)
-
-    try:
-        response = requests.get(url, headers=headers)
-        content = response.json()
-    except (requests.exceptions.ConnectionError, socket.gaierror, urllib3.exceptions.MaxRetryError) as e:
-        log.exception("failed to communicate with jokes api")
-        raise RequestError(e)
-
-    if not response.ok:
-        raise RequestError(f"[{response.status_code}]{response.text}")
-
-    return content
 
 
 def action_random_phrase(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
@@ -67,11 +37,12 @@ def action_official_joke_api(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 def action_apininjas_facts(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    url = "https://api.api-ninjas.com/v1/facts?limit=1"
-    api_ninjas_key = os.getenv("API_NINJAS_KEY")
+    api = ApiNinjas("facts", {
+        "limit": 1,
+    })
 
     try:
-        res = get_json_from_url(url, headers={"X-Api-Key": api_ninjas_key})
+        res = api.get()
     except RequestError as e:
         return escape_markdown("\n".join(e.args))
     if res:
@@ -79,11 +50,10 @@ def action_apininjas_facts(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 def action_apininjas_chuck_norris(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    url = "https://api.api-ninjas.com/v1/chucknorris"
-    api_ninjas_key = os.getenv("API_NINJAS_KEY")
+    api = ApiNinjas("chucknorris")
 
     try:
-        res = get_json_from_url(url, headers={"X-Api-Key": api_ninjas_key})
+        res = api.get()
     except RequestError as e:
         return escape_markdown("\n".join(e.args))
     if res:
@@ -91,11 +61,12 @@ def action_apininjas_chuck_norris(update: Update, context: ContextTypes.DEFAULT_
 
 
 def action_apininjas_dad_joke(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    url = "https://api.api-ninjas.com/v1/dadjokes?limit=1"
-    api_ninjas_key = os.getenv("API_NINJAS_KEY")
+    api = ApiNinjas("dadjokes", {
+        "limit": 1,
+    })
 
     try:
-        res = get_json_from_url(url, headers={"X-Api-Key": api_ninjas_key})
+        res = api.get()
     except RequestError as e:
         return escape_markdown("\n".join(e.args))
     if res:
@@ -103,11 +74,12 @@ def action_apininjas_dad_joke(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 def action_apininjas_quotes(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    url = "https://api.api-ninjas.com/v1/quotes?limit=1"
-    api_ninjas_key = os.getenv("API_NINJAS_KEY")
+    api = ApiNinjas("quotes", {
+        "limit": 1,
+    })
 
     try:
-        res = get_json_from_url(url, headers={"X-Api-Key": api_ninjas_key})
+        res = api.get()
     except RequestError as e:
         return escape_markdown("\n".join(e.args))
     if res:
@@ -118,13 +90,15 @@ def action_apininjas_quotes(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 def action_apininjas_trivia(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    url = "https://api.api-ninjas.com/v1/trivia?limit=1"
-    api_ninjas_key = os.getenv("API_NINJAS_KEY")
+    api = ApiNinjas("trivia", {
+        "limit": 1,
+    })
 
     try:
-        res = get_json_from_url(url, headers={"X-Api-Key": api_ninjas_key})
+        res = api.get()
     except RequestError as e:
         return escape_markdown("\n".join(e.args))
+
     if res:
         question = escape_markdown(res[0]["question"])
         answer = escape_markdown(res[0]["answer"])
@@ -135,13 +109,16 @@ def action_apininjas_trivia(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def action_apininjas_weather(update: Update, context: ContextTypes.DEFAULT_TYPE):
     city = random.choice(list(geonamescache.GeonamesCache().get_cities().items()))[1]
-    url = f"https://api.api-ninjas.com/v1/weather?lat={city['latitude']}&lon={city['longitude']}"
-    api_ninjas_key = os.getenv("API_NINJAS_KEY")
+    api = ApiNinjas("weather", {
+        "lat": city['latitude'],
+        "lon": city['longitude'],
+    })
 
     try:
-        res = get_json_from_url(url, headers={"X-Api-Key": api_ninjas_key})
+        res = api.get()
     except RequestError as e:
         return escape_markdown("\n".join(e.args))
+
     if res:
         temperature = res["temp"]
         city_name = escape_markdown(city["name"])
