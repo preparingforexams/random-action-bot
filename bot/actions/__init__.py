@@ -63,8 +63,7 @@ def action_official_joke_api(update: Update, context: ContextTypes.DEFAULT_TYPE)
     punchline = escape_markdown(joke["punchline"])
     return f"""{setup}
 
-||{punchline}||
-"""
+||{punchline}||"""
 
 
 def action_apininjas_facts(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -131,8 +130,7 @@ def action_apininjas_trivia(update: Update, context: ContextTypes.DEFAULT_TYPE):
         answer = escape_markdown(res[0]["answer"])
         return f"""{question}
 
-||{answer}||
-"""
+||{answer}||"""
 
 
 def action_apininjas_weather(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -152,5 +150,4 @@ def action_apininjas_weather(update: Update, context: ContextTypes.DEFAULT_TYPE)
         timezone = escape_markdown(city["timezone"])
         return f"""It's {temperature} °C in {city_name}/{country_name}
 Population: {population}
-Timezone: {timezone}
-"""
+Timezone: {timezone}"""
