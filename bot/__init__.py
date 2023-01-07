@@ -18,7 +18,7 @@ def send_telegram_error_message(message: str, *, update: Update = None):
 async def random_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
     log = create_logger(inspect.currentframe().f_code.co_name)
 
-    if update.effective_message.text and not update.effective_message.text.startswith("/"):
+    if not (update.effective_message.text and update.effective_message.text.startswith("/")):
         return lambda x: x
 
     possible_actions = [action for action in dir(actions) if action.startswith("action_")]
