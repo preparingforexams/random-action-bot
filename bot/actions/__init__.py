@@ -125,6 +125,6 @@ def action_apininjas_weather(update: Update, context: ContextTypes.DEFAULT_TYPE)
         country_name = escape_markdown(city["countrycode"])
         population = city["population"]
         timezone = escape_markdown(city["timezone"])
-        return f"""It's {temperature} °C in {city_name}/{country_name}
+        return f"""It's {temperature}°C in {city_name}/{country_name}
 Population: {population}
 Timezone: {timezone}"""
