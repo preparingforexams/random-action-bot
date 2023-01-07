@@ -88,3 +88,30 @@ def action_apininjas_chuck_norris(update: Update, context: ContextTypes.DEFAULT_
         return escape_markdown("\n".join(e.args))
     if res:
         return escape_markdown(res["joke"])
+
+
+def action_apininjas_dad_joke(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    url = "https://api.api-ninjas.com/v1/dadjokes?limit=1"
+    api_ninjas_key = os.getenv("API_NINJAS_KEY")
+
+    try:
+        res = get_json_from_url(url, headers={"X-Api-Key": api_ninjas_key})
+    except RequestError as e:
+        return escape_markdown("\n".join(e.args))
+    if res:
+        return escape_markdown(res[0]["joke"])
+
+
+def action_apininjas_quotes(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    url = "https://api.api-ninjas.com/v1/quotes?limit=1"
+    api_ninjas_key = os.getenv("API_NINJAS_KEY")
+
+    try:
+        res = get_json_from_url(url, headers={"X-Api-Key": api_ninjas_key})
+    except RequestError as e:
+        return escape_markdown("\n".join(e.args))
+    if res:
+        quote = escape_markdown(res[0]["quote"])
+        author = escape_markdown(res[0]["author"])
+        return fr""""{quote}"
+\- _{author}_"""
