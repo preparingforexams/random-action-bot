@@ -133,7 +133,8 @@ Timezone: {timezone}"""
 
 
 def action_tim_imdb(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    url = os.getenv("TIM_API_URL") or "https://api.timhatdiehandandermaus.consulting/movie?q="
+    url = os.getenv("TIM_API_URL") or "https://api.timhatdiehandandermaus.consulting"
+    url += "/movie?q="
     response = requests.get(url)
     js = response.json()
 
