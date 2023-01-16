@@ -2,7 +2,9 @@ import inspect
 import os
 import random
 
-import geonamescache as geonamescache
+import geonamescache
+import requests
+from imdb import Cinemagoer
 from telegram import Update
 from telegram.ext import ContextTypes
 
@@ -128,3 +130,43 @@ def action_apininjas_weather(update: Update, context: ContextTypes.DEFAULT_TYPE)
         return f"""It's {temperature}°C in {city_name}/{country_name}
 Population: {population}
 Timezone: {timezone}"""
+
+
+def action_tim_imdb(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    url = os.getenv("TIM_API_URL") or "https://api.timhatdiehandandermaus.consulting/movie?q="
+    response = requests.get(url)
+    js = response.json()
+
+    info_types: list[str] = ["goofs", "trivia", "quotes"]
+    api_movie = random.choice([movie for movie in js["movies"] if
+                               movie["status"].lower() == "watched" or movie["imdb"]["title"] == "Airplane!"])
+    info_type = random.choice(info_types)
+    c = Cinemagoer()
+    imdb_movie = c.get_movie(api_movie["imdb"]["id"])
+    c.update(imdb_movie, info_types)
+
+    if not any(info_type in imdb_movie.data.keys() for info_type in info_types):
+        return action_tim_imdb(update, context)
+
+    random.shuffle(info_types)
+    for info_type in info_types:
+        try:
+            info = random.choice(imdb_movie.data[info_type])
+        except KeyError:
+            continue
+        if isinstance(info, dict):
+            info_text = info["text"]
+        elif isinstance(info, list):
+            info_text = info[0]
+        else:
+            info_text = info
+
+        info_text = escape_markdown(info_text)
+        movie_text = escape_markdown(api_movie["imdb"]["title"])
+        text = f"""||
+{info_text}
+||
+\- {movie_text} \({info_type}\)
+"""
+
+    return text

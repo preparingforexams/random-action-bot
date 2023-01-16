@@ -23,3 +23,5 @@ secret:
 
 configmap:
   name: random-action-bot
+  tim:
+    apiUrl: http://api.timhatdiehandandermaus:8080
