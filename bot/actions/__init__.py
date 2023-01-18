@@ -122,7 +122,7 @@ def action_apininjas_weather(update: Update, context: ContextTypes.DEFAULT_TYPE)
         return escape_markdown("\n".join(e.args))
 
     if res:
-        temperature = res["temp"]
+        temperature = escape_markdown(res["temp"])
         city_name = escape_markdown(city["name"])
         country_name = escape_markdown(city["countrycode"])
         population = city["population"]
