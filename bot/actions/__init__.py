@@ -12,6 +12,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from .apininjas import ApiNinjas
+from .nasaapi import NasaApi
 from .thecatapi import TheCatApi
 from .utils import escape_markdown, get_json_from_url, RequestError
 from ..logger import create_logger
@@ -278,5 +279,23 @@ def action_the_cat_api(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if res:
         cat = random.choice(res)
         return cat["url"]
+
+    return None
+
+
+@actions.add(weight=10, message_type=MessageType.Photo)
+def action_nasa_apod(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    api = NasaApi("/planetary/apod", {
+        "count": 1
+    })
+
+    try:
+        res = api.get()
+    except RequestError as e:
+        return escape_markdown("\n".join(e.args))
+
+    if res:
+        cat = random.choice(res)
+        return cat["hdurl"]
 
     return None

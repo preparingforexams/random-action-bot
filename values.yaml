@@ -21,6 +21,7 @@ secret:
   botToken: __TELEGRAM_TOKEN__
   apiNinjasKey: __API_NINJAS_KEY__
   theCatsApiKey: __THE_CATS_API_KEY__
+  nasaApiKey: __NASA_API_KEY__
 
 configmap:
   name: random-action-bot
