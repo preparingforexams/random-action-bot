@@ -334,7 +334,9 @@ def action_the_cat_api(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @actions.add(weight=10, message_type=MessageType.Photo)
 def action_nasa_apod(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    api = NasaApi("/planetary/apod", {})
+    api = NasaApi("/planetary/apod", {
+        "count": 1,
+    })
 
     try:
         res = api.get()
@@ -342,10 +344,11 @@ def action_nasa_apod(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return TextMessage(escape_markdown("\n".join(e.args)))
 
     if res:
-        url = res["hdurl"]
-        caption = escape_markdown(f"""{res["title"]} ({res['date']}):
+        image = res[0]
+        url = image.get("hdurl") or image.get("url")
+        caption = escape_markdown(f"""{image["title"]} ({image['date']}):
 
-{res["explanation"]}
+{image["explanation"]}
 """)
         return PhotoMessage(url, caption)
 
