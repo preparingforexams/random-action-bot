@@ -12,6 +12,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from .apininjas import ApiNinjas
+from .thecatapi import TheCatApi
 from .utils import escape_markdown, get_json_from_url, RequestError
 from ..logger import create_logger
 
@@ -244,9 +245,10 @@ def action_tim_imdb(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return text
 
 
-@actions.add(weight=8, message_type=MessageType.Photo)
+@actions.add(weight=10, message_type=MessageType.Photo)
 def action_apininjas_cats(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    MAX_OFFSET = 62  # experimentally checked that there are 82 available items
+    MAX_OFFSET = 62  # experimentally checked that there are 82 available items and 20 items are returned by default
+    random_offset = random.randint(0, MAX_OFFSET)
     api = ApiNinjas("cats", {
         "limit": 20,
         "min_weight": 1,  # arbitrary key since at least one filter has to be set
@@ -260,5 +262,21 @@ def action_apininjas_cats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if res:
         cat = random.choice(res)
         return cat["image_link"]
+
+    return None
+
+
+@actions.add(weight=10, message_type=MessageType.Photo)
+def action_the_cat_api(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    api = TheCatApi("v1/images/search", {})
+
+    try:
+        res = api.get()
+    except RequestError as e:
+        return escape_markdown("\n".join(e.args))
+
+    if res:
+        cat = random.choice(res)
+        return cat["url"]
 
     return None
