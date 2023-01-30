@@ -70,7 +70,7 @@ class Action:
         return self._f.__name__
 
     def __str__(self):
-        return f"{function_to_md(self._f)}: {self.weight} \({self.type.value}\)"
+        return f"/{function_to_md(self._f)}: {self.weight} \({self.type.value}\)"
 
 
 class TheDecider:
