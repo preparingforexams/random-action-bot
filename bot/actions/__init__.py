@@ -141,7 +141,6 @@ def action_tim_imdb(update: Update, context: ContextTypes.DEFAULT_TYPE):
     info_types: list[str] = ["goofs", "trivia", "quotes"]
     api_movie = random.choice([movie for movie in js["movies"] if
                                movie["status"].lower() == "watched" or movie["imdb"]["title"] == "Airplane!"])
-    info_type = random.choice(info_types)
     c = Cinemagoer()
     imdb_movie = c.get_movie(api_movie["imdb"]["id"])
     c.update(imdb_movie, info_types)
