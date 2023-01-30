@@ -5,6 +5,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from . import actions
+from .actions import MessageType
 from .logger import create_logger
 
 
@@ -28,6 +29,10 @@ async def random_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not action:
         action = actions.actions.random()
 
-    log.debug(f"chose {action.__name__}")
+    log.debug(f"chose {action.f.__name__}")
     message = action(update, context)
-    return await update.effective_message.reply_text(message, parse_mode=telegram.constants.ParseMode.MARKDOWN_V2)
+
+    if action.type == MessageType.Text:
+        return await update.effective_message.reply_text(message, parse_mode=telegram.constants.ParseMode.MARKDOWN_V2)
+    elif action.type == MessageType.Photo:
+        return await update.effective_message.reply_photo(message)

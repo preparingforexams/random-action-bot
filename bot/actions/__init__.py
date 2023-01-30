@@ -1,7 +1,9 @@
+import dataclasses
 import inspect
 import os
 import random
-from typing import List, Callable, Tuple, Optional
+from enum import Enum
+from typing import List, Callable, Optional
 
 import geonamescache
 import requests
@@ -14,38 +16,58 @@ from .utils import escape_markdown, get_json_from_url, RequestError
 from ..logger import create_logger
 
 
+class MessageType(Enum):
+    Text = "text"
+    Photo = "photo"
+
+
+def function_to_md(f: Callable):
+    return escape_markdown(f.__name__.replace('action_', ''))
+
+
+@dataclasses.dataclass
+class Action:
+    f: Callable[[Update, ContextTypes], str]
+    weight: float
+    type: MessageType
+
+    def __call__(self, *args, **kwargs):
+        return self.f(*args, **kwargs)
+
+    def __str__(self):
+        return f"{function_to_md(self.f)}: {self.weight} ({self.type.value})"
+
+
 class TheDecider:
-    actions: List[Tuple[Callable[[Update, ContextTypes], str], float]] = None
+    actions: List[Action] = None
 
     def __init__(self):
         self.actions = []
 
-    def add(self, weight: float = 10):
+    def add(self, weight: float = 10, message_type: MessageType = MessageType.Text):
         def wrapper(f: Callable[[Update, ContextTypes], str]):
-            self.actions.append((f, weight))
+            self.actions.append(Action(f, weight, message_type))
 
             return f
 
         return wrapper
 
-    def find(self, name: str) -> Optional[Callable]:
+    def find(self, name: str) -> Optional[Action]:
         for action in self.actions:
-            action_name = action[0].__name__
+            action_name = action.f.__name__
             if action_name == name.lower() or action_name == f"action_{name}".lower():
-                return action[0]
+                return action
 
         return None
 
-    def random(self):
+    def random(self) -> Action:
         return random.choices(
-            [x[0] for x in self.actions],
-            weights=[x[1] for x in self.actions],
+            [x for x in self.actions],
+            weights=[x.weight for x in self.actions],
         )[0]
 
     def __str__(self):
-        def function_to_md(f: Callable):
-            return escape_markdown(f.__name__.replace('action_', ''))
-        return "\n".join([f"{function_to_md(f)}: {w}" for (f, w) in self.actions])
+        return "\n".join([str(action) for action in self.actions])
 
 
 actions = TheDecider()
@@ -217,3 +239,23 @@ def action_tim_imdb(update: Update, context: ContextTypes.DEFAULT_TYPE):
 """
 
     return text
+
+
+@actions.add(weight=8, message_type=MessageType.Photo)
+def action_apininjas_cats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    MAX_OFFSET = 62  # experimentally checked that there are 82 available items
+    api = ApiNinjas("cats", {
+        "limit": 20,
+        "min_weight": 1,  # arbitrary key since at least one filter has to be set
+    })
+
+    try:
+        res = api.get()
+    except RequestError as e:
+        return escape_markdown("\n".join(e.args))
+
+    if res:
+        cat = random.choice(res)
+        return cat["image_link"]
+
+    return None
