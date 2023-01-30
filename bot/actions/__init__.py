@@ -1,7 +1,7 @@
 import inspect
 import os
 import random
-from typing import List, Callable, Tuple
+from typing import List, Callable, Tuple, Optional
 
 import geonamescache
 import requests
@@ -27,6 +27,14 @@ class TheDecider:
             return f
 
         return wrapper
+
+    def find(self, name: str) -> Optional[Callable]:
+        for action in self.actions:
+            action_name = action[0].__name__
+            if action_name == name.lower() or action_name == f"action_{name}".lower():
+                return action[0]
+
+        return None
 
     def random(self):
         return random.choices(

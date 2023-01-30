@@ -20,7 +20,9 @@ async def random_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not (update.effective_message.text and update.effective_message.text.startswith("/")):
         return lambda x: x
 
-    action = actions.actions.random()
+    action = actions.actions.find(update.effective_message.text.replace("/", ""))
+    if not action:
+        action = actions.actions.random()
 
     log.debug(f"chose {action.__name__}")
     message = action(update, context)
