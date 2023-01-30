@@ -314,3 +314,18 @@ def action_fox(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return res["image"]
 
     return None
+
+
+@actions.add(weight=10, message_type=MessageType.Photo)
+def action_dog_ceo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    url = "https://dog.ceo/api/breeds/image/random"
+
+    try:
+        res = get_json_from_url(url)
+    except RequestError as e:
+        return escape_markdown("\n".join(e.args))
+
+    if res:
+        return res["message"]
+
+    return None
