@@ -18,7 +18,8 @@ def send_telegram_error_message(message: str, *, update: Update = None):
 async def random_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
     log = create_logger(inspect.currentframe().f_code.co_name)
 
-    if not (update.effective_message.text and update.effective_message.text.startswith("/")):
+    text = update.effective_message.text if update.effective_message.text else update.effective_message.caption
+    if not (text and text.startswith("/")):
         return lambda x: x
 
     if update.effective_message.text.lower() == "/weights":
