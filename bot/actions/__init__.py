@@ -329,3 +329,26 @@ def action_dog_ceo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return res["message"]
 
     return None
+
+
+@actions.add(weight=10, message_type=MessageType.Photo)
+def action_spacex(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    url = "https://api.spacexdata.com/v5/launches/"
+
+    try:
+        res = get_json_from_url(url)
+    except RequestError as e:
+        return escape_markdown("\n".join(e.args))
+
+    if res:
+        # this is fine, `/launches` always returns a list if successful
+        # noinspection PyTypeChecker
+        random.shuffle(res)
+        for launch in res:
+            links = launch["links"]["flickr"]["original"]
+            if not links:
+                continue
+
+            return random.choice(links)
+
+    return None
