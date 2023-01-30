@@ -20,7 +20,7 @@ async def random_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     text = update.effective_message.text if update.effective_message.text else update.effective_message.caption
     if not (text and text.startswith("/")):
-        return lambda x: x
+        return
 
     if update.effective_message.text.lower() == "/weights":
         message = str(actions.actions)
