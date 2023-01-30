@@ -299,3 +299,18 @@ def action_nasa_apod(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return cat["hdurl"]
 
     return None
+
+
+@actions.add(weight=10, message_type=MessageType.Photo)
+def action_fox(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    url = "https://randomfox.ca/floof/"
+
+    try:
+        res = get_json_from_url(url)
+    except RequestError as e:
+        return escape_markdown("\n".join(e.args))
+
+    if res:
+        return res["image"]
+
+    return None
