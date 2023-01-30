@@ -1,6 +1,7 @@
 import inspect
 import os
 import random
+from typing import List, Callable, Tuple
 
 import geonamescache
 import requests
@@ -13,6 +14,31 @@ from .utils import escape_markdown, get_json_from_url, RequestError
 from ..logger import create_logger
 
 
+class TheDecider:
+    actions: List[Tuple[Callable[[Update, ContextTypes], str], float]] = None
+
+    def __init__(self):
+        self.actions = []
+
+    def add(self, weight: float = 10):
+        def wrapper(f: Callable[[Update, ContextTypes], str]):
+            self.actions.append((f, weight))
+
+            return f
+
+        return wrapper
+
+    def random(self):
+        return random.choices(
+            [x[0] for x in self.actions],
+            weights=[x[1] for x in self.actions],
+        )[0]
+
+
+actions = TheDecider()
+
+
+@actions.add(weight=10)
 def action_random_phrase(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     return escape_markdown(random.choice([
         "Hello World!",
@@ -20,6 +46,7 @@ def action_random_phrase(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     ]))
 
 
+@actions.add(weight=10)
 def action_official_joke_api(update: Update, context: ContextTypes.DEFAULT_TYPE):
     log = create_logger(inspect.currentframe().f_code.co_name)
 
@@ -38,6 +65,7 @@ def action_official_joke_api(update: Update, context: ContextTypes.DEFAULT_TYPE)
 ||{punchline}||"""
 
 
+@actions.add(weight=5)
 def action_apininjas_facts(update: Update, context: ContextTypes.DEFAULT_TYPE):
     api = ApiNinjas("facts", {
         "limit": 1,
@@ -51,6 +79,7 @@ def action_apininjas_facts(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return escape_markdown(res[0]["fact"])
 
 
+@actions.add(weight=7)
 def action_apininjas_chuck_norris(update: Update, context: ContextTypes.DEFAULT_TYPE):
     api = ApiNinjas("chucknorris")
 
@@ -62,6 +91,7 @@ def action_apininjas_chuck_norris(update: Update, context: ContextTypes.DEFAULT_
         return escape_markdown(res["joke"])
 
 
+@actions.add(weight=10)
 def action_apininjas_dad_joke(update: Update, context: ContextTypes.DEFAULT_TYPE):
     api = ApiNinjas("dadjokes", {
         "limit": 1,
@@ -75,6 +105,7 @@ def action_apininjas_dad_joke(update: Update, context: ContextTypes.DEFAULT_TYPE
         return escape_markdown(res[0]["joke"])
 
 
+@actions.add(weight=4)
 def action_apininjas_quotes(update: Update, context: ContextTypes.DEFAULT_TYPE):
     api = ApiNinjas("quotes", {
         "limit": 1,
@@ -91,6 +122,7 @@ def action_apininjas_quotes(update: Update, context: ContextTypes.DEFAULT_TYPE):
 \- _{author}_"""
 
 
+@actions.add(weight=9)
 def action_apininjas_trivia(update: Update, context: ContextTypes.DEFAULT_TYPE):
     api = ApiNinjas("trivia", {
         "limit": 1,
@@ -109,6 +141,7 @@ def action_apininjas_trivia(update: Update, context: ContextTypes.DEFAULT_TYPE):
 ||{answer}||"""
 
 
+@actions.add(weight=8)
 def action_apininjas_weather(update: Update, context: ContextTypes.DEFAULT_TYPE):
     city = random.choice(list(geonamescache.GeonamesCache().get_cities().items()))[1]
     api = ApiNinjas("weather", {
@@ -132,6 +165,7 @@ Population: {population}
 Timezone: {timezone}"""
 
 
+@actions.add(weight=10)
 def action_tim_imdb(update: Update, context: ContextTypes.DEFAULT_TYPE):
     url = os.getenv("TIM_API_URL") or "https://api.timhatdiehandandermaus.consulting"
     url += "/movie?q="

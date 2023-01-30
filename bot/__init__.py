@@ -1,5 +1,4 @@
 import inspect
-import random
 
 import telegram.constants
 from telegram import Update
@@ -21,14 +20,8 @@ async def random_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not (update.effective_message.text and update.effective_message.text.startswith("/")):
         return lambda x: x
 
-    possible_actions = [action for action in dir(actions) if action.startswith("action_")]
-    if not possible_actions:
-        return send_telegram_error_message("no actions available", update=update)
+    action = actions.actions.random()
 
-    log.debug(f"choose random action from {len(possible_actions)} actions")
-    action_name = random.choice(possible_actions)
-
-    log.debug(f"chose {action_name}")
-    action = getattr(actions, action_name)
+    log.debug(f"chose {action.__name__}")
     message = action(update, context)
     return await update.effective_message.reply_text(message, parse_mode=telegram.constants.ParseMode.MARKDOWN_V2)
