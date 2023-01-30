@@ -32,8 +32,4 @@ async def random_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     log.debug(f"chose {action.name()}")
     message = action(update, context)
-
-    if action.type == MessageType.Text:
-        return await update.effective_message.reply_text(message, parse_mode=telegram.constants.ParseMode.MARKDOWN_V2)
-    elif action.type == MessageType.Photo:
-        return await update.effective_message.reply_photo(message)
+    return await message.send(update)

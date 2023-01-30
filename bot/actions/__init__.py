@@ -3,10 +3,11 @@ import inspect
 import os
 import random
 from enum import Enum
-from typing import List, Callable, Optional
+from typing import List, Callable, Optional, Type
 
 import geonamescache
 import requests
+import telegram.constants
 from imdb import Cinemagoer
 from telegram import Update
 from telegram.ext import ContextTypes
@@ -21,6 +22,35 @@ from ..logger import create_logger
 class MessageType(Enum):
     Text = "text"
     Photo = "photo"
+
+
+class Message:
+    type: MessageType
+    parse_mode: telegram.constants.ParseMode = telegram.constants.ParseMode.MARKDOWN_V2
+
+    # noinspection PyUnresolvedReferences
+    async def send(self, update: Update):
+        if self.type == MessageType.Text:
+            await update.effective_message.reply_text(self.text, parse_mode=self.parse_mode)
+        elif self.type == MessageType.Photo:
+            await update.effective_message.reply_photo(
+                self.url,
+                caption=self.caption,
+                parse_mode=self.parse_mode,
+            )
+
+
+@dataclasses.dataclass
+class TextMessage(Message):
+    type = MessageType.Text
+    text: str
+
+
+@dataclasses.dataclass
+class PhotoMessage(Message):
+    type = MessageType.Photo
+    url: str
+    caption: str = ""
 
 
 def function_to_md(f: Callable):
@@ -79,11 +109,11 @@ actions = TheDecider()
 
 
 @actions.add(weight=10)
-def action_random_phrase(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
-    return escape_markdown(random.choice([
+def action_random_phrase(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    return TextMessage(escape_markdown(random.choice([
         "Hello World!",
         "This command is not supported",
-    ]))
+    ])))
 
 
 @actions.add(weight=10)
@@ -100,9 +130,9 @@ def action_official_joke_api(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     setup = escape_markdown(joke["setup"])
     punchline = escape_markdown(joke["punchline"])
-    return f"""{setup}
+    return TextMessage(f"""{setup}
 
-||{punchline}||"""
+||{punchline}||""")
 
 
 @actions.add(weight=5)
@@ -111,24 +141,30 @@ def action_apininjas_facts(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "limit": 1,
     })
 
+    message = ""
     try:
         res = api.get()
     except RequestError as e:
-        return escape_markdown("\n".join(e.args))
+        message = escape_markdown("\n".join(e.args))
     if res:
-        return escape_markdown(res[0]["fact"])
+        message = escape_markdown(res[0]["fact"])
+
+    return TextMessage(message)
 
 
 @actions.add(weight=7)
 def action_apininjas_chuck_norris(update: Update, context: ContextTypes.DEFAULT_TYPE):
     api = ApiNinjas("chucknorris")
 
+    message = ""
     try:
         res = api.get()
     except RequestError as e:
-        return escape_markdown("\n".join(e.args))
+        message = escape_markdown("\n".join(e.args))
     if res:
-        return escape_markdown(res["joke"])
+        message = escape_markdown(res["joke"])
+
+    return TextMessage(message)
 
 
 @actions.add(weight=10)
@@ -137,12 +173,16 @@ def action_apininjas_dad_joke(update: Update, context: ContextTypes.DEFAULT_TYPE
         "limit": 1,
     })
 
+    message = ""
     try:
         res = api.get()
     except RequestError as e:
-        return escape_markdown("\n".join(e.args))
+        return TextMessage(escape_markdown("\n".join(e.args)))
+
     if res:
-        return escape_markdown(res[0]["joke"])
+        message = escape_markdown(res[0]["joke"])
+
+    return TextMessage(message)
 
 
 @actions.add(weight=4)
@@ -151,15 +191,19 @@ def action_apininjas_quotes(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "limit": 1,
     })
 
+    message = ""
     try:
         res = api.get()
     except RequestError as e:
-        return escape_markdown("\n".join(e.args))
+        return TextMessage(escape_markdown("\n".join(e.args)))
+
     if res:
         quote = escape_markdown(res[0]["quote"])
         author = escape_markdown(res[0]["author"])
-        return fr""""{quote}"
-\- _{author}_"""
+        message = TextMessage(fr""""{quote}"
+\- _{author}_""")
+
+    return TextMessage(message)
 
 
 @actions.add(weight=9)
@@ -168,17 +212,20 @@ def action_apininjas_trivia(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "limit": 1,
     })
 
+    message = ""
     try:
         res = api.get()
     except RequestError as e:
-        return escape_markdown("\n".join(e.args))
+        return TextMessage(escape_markdown("\n".join(e.args)))
 
     if res:
         question = escape_markdown(res[0]["question"])
         answer = escape_markdown(res[0]["answer"])
-        return f"""{question}
+        message = f"""{question}
 
 ||{answer}||"""
+
+    return TextMessage(message)
 
 
 @actions.add(weight=8)
@@ -189,10 +236,11 @@ def action_apininjas_weather(update: Update, context: ContextTypes.DEFAULT_TYPE)
         "lon": city['longitude'],
     })
 
+    message = ""
     try:
         res = api.get()
     except RequestError as e:
-        return escape_markdown("\n".join(e.args))
+        message = escape_markdown("\n".join(e.args))
 
     if res:
         temperature = escape_markdown(str(res["temp"]))
@@ -200,9 +248,11 @@ def action_apininjas_weather(update: Update, context: ContextTypes.DEFAULT_TYPE)
         country_name = escape_markdown(city["countrycode"])
         population = city["population"]
         timezone = escape_markdown(city["timezone"])
-        return f"""It's {temperature}°C in {city_name}/{country_name}
+        message = f"""It's {temperature}°C in {city_name}/{country_name}
 Population: {population}
 Timezone: {timezone}"""
+
+    return TextMessage(message)
 
 
 @actions.add(weight=10)
@@ -243,7 +293,7 @@ def action_tim_imdb(update: Update, context: ContextTypes.DEFAULT_TYPE):
 \- {movie_text} \({info_type}\)
 """
 
-    return text
+    return TextMessage(text)
 
 
 @actions.add(weight=10, message_type=MessageType.Photo)
@@ -258,13 +308,13 @@ def action_apininjas_cats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         res = api.get()
     except RequestError as e:
-        return escape_markdown("\n".join(e.args))
+        return TextMessage(escape_markdown("\n".join(e.args)))
 
     if res:
         cat = random.choice(res)
-        return cat["image_link"]
-
-    return None
+        url = cat["image_link"]
+        caption = escape_markdown(f"{cat['name']} from {cat['origin']}")
+        return PhotoMessage(url, caption)
 
 
 @actions.add(weight=10, message_type=MessageType.Photo)
@@ -274,31 +324,30 @@ def action_the_cat_api(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         res = api.get()
     except RequestError as e:
-        return escape_markdown("\n".join(e.args))
+        return TextMessage(escape_markdown("\n".join(e.args)))
 
     if res:
         cat = random.choice(res)
-        return cat["url"]
-
-    return None
+        message = cat["url"]
+        return PhotoMessage(message)
 
 
 @actions.add(weight=10, message_type=MessageType.Photo)
 def action_nasa_apod(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    api = NasaApi("/planetary/apod", {
-        "count": 1
-    })
+    api = NasaApi("/planetary/apod", {})
 
     try:
         res = api.get()
     except RequestError as e:
-        return escape_markdown("\n".join(e.args))
+        return TextMessage(escape_markdown("\n".join(e.args)))
 
     if res:
-        cat = random.choice(res)
-        return cat["hdurl"]
+        url = res["hdurl"]
+        caption = escape_markdown(f"""{res["title"]} ({res['date']}):
 
-    return None
+{res["explanation"]}
+""")
+        return PhotoMessage(url, caption)
 
 
 @actions.add(weight=10, message_type=MessageType.Photo)
@@ -308,10 +357,10 @@ def action_fox(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         res = get_json_from_url(url)
     except RequestError as e:
-        return escape_markdown("\n".join(e.args))
+        return TextMessage(escape_markdown("\n".join(e.args)))
 
     if res:
-        return res["image"]
+        return PhotoMessage(res["image"])
 
     return None
 
@@ -323,10 +372,10 @@ def action_dog_ceo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         res = get_json_from_url(url)
     except RequestError as e:
-        return escape_markdown("\n".join(e.args))
+        return TextMessage(escape_markdown("\n".join(e.args)))
 
     if res:
-        return res["message"]
+        return PhotoMessage(res["message"])
 
     return None
 
@@ -338,7 +387,7 @@ def action_spacex(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         res = get_json_from_url(url)
     except RequestError as e:
-        return escape_markdown("\n".join(e.args))
+        return TextMessage(escape_markdown("\n".join(e.args)))
 
     if res:
         # this is fine, `/launches` always returns a list if successful
@@ -349,6 +398,8 @@ def action_spacex(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if not links:
                 continue
 
-            return random.choice(links)
+            url = random.choice(links)
+            caption = launch.get("detail", "")
+            return PhotoMessage(url, caption)
 
     return None
