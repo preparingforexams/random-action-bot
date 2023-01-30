@@ -29,7 +29,7 @@ async def random_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not action:
         action = actions.actions.random()
 
-    log.debug(f"chose {action.f.__name__}")
+    log.debug(f"chose {action.name()}")
     message = action(update, context)
 
     if action.type == MessageType.Text:

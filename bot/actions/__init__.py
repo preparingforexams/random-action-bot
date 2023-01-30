@@ -27,15 +27,18 @@ def function_to_md(f: Callable):
 
 @dataclasses.dataclass
 class Action:
-    f: Callable[[Update, ContextTypes], str]
+    _f: Callable[[Update, ContextTypes], str]
     weight: float
     type: MessageType
 
     def __call__(self, *args, **kwargs):
-        return self.f(*args, **kwargs)
+        return self._f(*args, **kwargs)
+
+    def name(self):
+        return self._f.__name__
 
     def __str__(self):
-        return f"{function_to_md(self.f)}: {self.weight} ({self.type.value})"
+        return f"{function_to_md(self._f)}: {self.weight} ({self.type.value})"
 
 
 class TheDecider:
@@ -54,7 +57,7 @@ class TheDecider:
 
     def find(self, name: str) -> Optional[Action]:
         for action in self.actions:
-            action_name = action.f.__name__
+            action_name = action.name()
             if action_name == name.lower() or action_name == f"action_{name}".lower():
                 return action
 
