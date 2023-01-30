@@ -20,6 +20,10 @@ async def random_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not (update.effective_message.text and update.effective_message.text.startswith("/")):
         return lambda x: x
 
+    if update.effective_message.text.lower() == "/weights":
+        message = str(actions.actions)
+        return await update.effective_message.reply_text(message, parse_mode=telegram.constants.ParseMode.MARKDOWN_V2)
+
     action = actions.actions.find(update.effective_message.text.replace("/", ""))
     if not action:
         action = actions.actions.random()

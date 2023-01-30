@@ -42,6 +42,11 @@ class TheDecider:
             weights=[x[1] for x in self.actions],
         )[0]
 
+    def __str__(self):
+        def function_to_md(f: Callable):
+            return escape_markdown(f.__name__.replace('action_', ''))
+        return "\n".join([f"{function_to_md(f)}: {w}" for (f, w) in self.actions])
+
 
 actions = TheDecider()
 
