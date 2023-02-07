@@ -16,7 +16,7 @@ from telegram.ext import ContextTypes
 from .apininjas import ApiNinjas
 from .nasaapi import NasaApi
 from .thecatapi import TheCatApi
-from .utils import escape_markdown, get_json_from_url, RequestError, _split_messages
+from .utils import escape_markdown, get_json_from_url, RequestError
 from ..logger import create_logger
 
 
@@ -32,7 +32,7 @@ class Message:
     # noinspection PyUnresolvedReferences
     async def send(self, update: Update):
         if self.type == MessageType.Text:
-            messages = _split_messages(self.text.splitlines(), join_with="\n")
+            messages = self.split()
             first = True
             for message in messages:
                 await update.effective_message.reply_text(message, parse_mode=self.parse_mode,
@@ -51,6 +51,30 @@ class Message:
 class TextMessage(Message):
     type = MessageType.Text
     text: str
+    split_by = "\n"
+    join_with = "\n"
+
+    def split(self) -> List[str]:
+        message_length = 4096
+        messages: List[List[str]] = []
+        current_length = 0
+        current_message = 0
+        join_by_length = len(self.join_with)
+        lines = self.text.split(self.split_by)
+
+        for line in lines:
+            if len(messages) <= current_message:
+                messages.append([])
+
+            line_length = len(line)
+            if current_length + line_length + (len(messages[current_message]) * join_by_length) < message_length:
+                current_length += line_length
+                messages[current_message].append(line)
+            else:
+                current_length = 0
+                current_message += 1
+
+        return [self.join_with.join(entry) for entry in messages]
 
 
 @dataclasses.dataclass
