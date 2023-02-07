@@ -3,6 +3,7 @@ import inspect
 import os
 import random
 import time
+from abc import abstractmethod
 from enum import Enum
 from typing import List, Callable, Optional
 
@@ -29,26 +30,22 @@ class Message:
     type: MessageType
     parse_mode: telegram.constants.ParseMode = telegram.constants.ParseMode.MARKDOWN_V2
 
-    # noinspection PyUnresolvedReferences
+    @abstractmethod
     async def send(self, update: Update):
-        if self.type == MessageType.Text:
-            messages = self.split()
-            first = True
-            for message in messages:
-                await update.effective_message.reply_text(message, parse_mode=self.parse_mode,
-                                                          disable_notification=not first)
-                first = False
-                time.sleep(0.5)
-        elif self.type == MessageType.Photo:
-            await update.effective_message.reply_photo(
-                self.url,
-                caption=self.caption[:1024],
-                parse_mode=self.parse_mode,
-            )
+        pass
 
 
 @dataclasses.dataclass
 class TextMessage(Message):
+    async def send(self, update: Update):
+        messages = self.split()
+        first = True
+        for message in messages:
+            await update.effective_message.reply_text(message, parse_mode=self.parse_mode,
+                                                      disable_notification=not first)
+            first = False
+            time.sleep(0.5)
+
     type = MessageType.Text
     text: str
     split_by = "\n"
@@ -82,6 +79,13 @@ class PhotoMessage(Message):
     type = MessageType.Photo
     url: str
     caption: str = ""
+
+    async def send(self, update: Update):
+        await update.effective_message.reply_photo(
+            self.url,
+            caption=self.caption[:1024],
+            parse_mode=self.parse_mode,
+        )
 
 
 def function_to_md(f: Callable):
