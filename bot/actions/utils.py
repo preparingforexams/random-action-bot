@@ -34,3 +34,23 @@ def get_json_from_url(url: str, *, headers: Dict = None) -> Optional[Dict]:
         raise RequestError(f"[{response.status_code}]{response.text}")
 
     return content
+
+
+def _split_messages(lines):
+    message_length = 4096
+    messages = []
+    current_length = 0
+    current_message = 0
+    for line in lines:
+        if len(messages) <= current_message:
+            messages.append([])
+
+        line_length = len(line)
+        if current_length + line_length + len(messages[current_message]) < message_length:
+            current_length += line_length
+            messages[current_message].append(line)
+        else:
+            current_length = 0
+            current_message += 1
+
+    return messages

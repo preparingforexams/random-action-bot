@@ -15,7 +15,7 @@ from telegram.ext import ContextTypes
 from .apininjas import ApiNinjas
 from .nasaapi import NasaApi
 from .thecatapi import TheCatApi
-from .utils import escape_markdown, get_json_from_url, RequestError
+from .utils import escape_markdown, get_json_from_url, RequestError, _split_messages
 from ..logger import create_logger
 
 
@@ -31,7 +31,13 @@ class Message:
     # noinspection PyUnresolvedReferences
     async def send(self, update: Update):
         if self.type == MessageType.Text:
-            await update.effective_message.reply_text(self.text, parse_mode=self.parse_mode)
+            messages = _split_messages(self.text.splitlines())
+            first = True
+            for message in messages:
+                message = "\n".join(message)
+                await update.effective_message.reply_text(message, parse_mode=self.parse_mode,
+                                                          disable_notification=not first)
+                first = False
         elif self.type == MessageType.Photo:
             await update.effective_message.reply_photo(
                 self.url,
