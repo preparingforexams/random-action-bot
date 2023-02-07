@@ -42,7 +42,7 @@ class Message:
         elif self.type == MessageType.Photo:
             await update.effective_message.reply_photo(
                 self.url,
-                caption=self.caption,
+                caption=self.caption[:1024],
                 parse_mode=self.parse_mode,
             )
 
