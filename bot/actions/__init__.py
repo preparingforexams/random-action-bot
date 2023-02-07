@@ -206,8 +206,8 @@ def action_apininjas_quotes(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if res:
         quote = escape_markdown(res[0]["quote"])
         author = escape_markdown(res[0]["author"])
-        message = TextMessage(fr""""{quote}"
-\- _{author}_""")
+        message = fr""""{quote}"
+\- _{author}_"""
 
     return TextMessage(message)
 
