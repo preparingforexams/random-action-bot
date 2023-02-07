@@ -32,10 +32,9 @@ class Message:
     # noinspection PyUnresolvedReferences
     async def send(self, update: Update):
         if self.type == MessageType.Text:
-            messages = _split_messages(self.text.splitlines())
+            messages = _split_messages(self.text.splitlines(), join_with="\n")
             first = True
             for message in messages:
-                message = "\n".join(message)
                 await update.effective_message.reply_text(message, parse_mode=self.parse_mode,
                                                           disable_notification=not first)
                 first = False

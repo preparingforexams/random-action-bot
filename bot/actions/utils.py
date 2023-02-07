@@ -1,6 +1,6 @@
 import inspect
 import socket
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 import requests as requests
 import urllib3 as urllib3
@@ -36,21 +36,23 @@ def get_json_from_url(url: str, *, headers: Dict = None) -> Optional[Dict]:
     return content
 
 
-def _split_messages(lines):
+def _split_messages(lines: List[str], join_with: str = "\n") -> List[str]:
     message_length = 4096
-    messages = []
+    messages: List[List[str]] = []
     current_length = 0
     current_message = 0
+    join_by_length = len(join_with)
+
     for line in lines:
         if len(messages) <= current_message:
             messages.append([])
 
         line_length = len(line)
-        if current_length + line_length + len(messages[current_message]) < message_length:
+        if current_length + line_length + (len(messages[current_message]) * join_by_length) < message_length:
             current_length += line_length
             messages[current_message].append(line)
         else:
             current_length = 0
             current_message += 1
 
-    return messages
+    return [join_with.join(entry) for entry in messages]
