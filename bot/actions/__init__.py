@@ -2,6 +2,7 @@ import dataclasses
 import inspect
 import os
 import random
+import time
 from enum import Enum
 from typing import List, Callable, Optional
 
@@ -38,6 +39,7 @@ class Message:
                 await update.effective_message.reply_text(message, parse_mode=self.parse_mode,
                                                           disable_notification=not first)
                 first = False
+                time.sleep(0.5)
         elif self.type == MessageType.Photo:
             await update.effective_message.reply_photo(
                 self.url,
