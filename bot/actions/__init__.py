@@ -412,3 +412,9 @@ def action_spacex(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return PhotoMessage(url, caption)
 
     return None
+
+
+@actions.add(weight=10, message_type=MessageType.Photo)
+def action_beemovie(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    from . import beemovie
+    return TextMessage(escape_markdown(beemovie.SCRIPT))
