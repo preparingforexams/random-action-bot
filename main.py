@@ -22,6 +22,9 @@ def main():
     bot_token = get_bot_token_or_die()
     application = ApplicationBuilder().token(bot_token).build()
 
+    weights_handler = telegram.ext.CommandHandler("weights", bot.weights)
+    application.add_handler(weights_handler)
+
     random_handler = telegram.ext.MessageHandler(telegram.ext.filters.ALL, bot.random_action)
     application.add_handler(random_handler)
 
