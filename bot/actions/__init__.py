@@ -338,6 +338,7 @@ def action_apininjas_cats():
     api = ApiNinjas("cats", {
         "limit": 20,
         "min_weight": 1,  # arbitrary key since at least one filter has to be set
+        "offset": random_offset,
     })
 
     try:
