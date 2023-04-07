@@ -9,7 +9,7 @@ from .actions import MessageType
 from .logger import create_logger
 
 
-def send_telegram_error_message(message: str, *, update: Update = None):
+def send_telegram_error_message(message: str, *, _: Update = None):
     log = create_logger(inspect.currentframe().f_code.co_name)
 
     log.error(message)
@@ -31,5 +31,5 @@ async def random_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
         action = actions.actions.random()
 
     log.debug(f"chose {action.name()}")
-    message = action(update, context)
+    message = action()
     return await message.send(update)

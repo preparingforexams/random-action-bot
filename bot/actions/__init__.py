@@ -94,12 +94,12 @@ def function_to_md(f: Callable):
 
 @dataclasses.dataclass
 class Action:
-    _f: Callable[[Update, ContextTypes], str]
+    _f: Callable[[], str]
     weight: float
     type: MessageType
 
     def __call__(self, *args, **kwargs):
-        return self._f(*args, **kwargs)
+        return self._f()
 
     def name(self):
         return self._f.__name__
@@ -144,7 +144,7 @@ actions = TheDecider()
 
 
 @actions.add(weight=10)
-def action_random_phrase(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_random_phrase():
     return TextMessage(escape_markdown(random.choice([
         "Hello World!",
         "This command is not supported",
@@ -152,7 +152,7 @@ def action_random_phrase(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @actions.add(weight=10)
-def action_official_joke_api(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_official_joke_api():
     log = create_logger(inspect.currentframe().f_code.co_name)
 
     # https://github.com/15Dkatz/official_joke_api
@@ -171,7 +171,7 @@ def action_official_joke_api(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 @actions.add(weight=5)
-def action_apininjas_facts(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_apininjas_facts():
     api = ApiNinjas("facts", {
         "limit": 1,
     })
@@ -188,7 +188,7 @@ def action_apininjas_facts(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @actions.add(weight=7)
-def action_apininjas_chuck_norris(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_apininjas_chuck_norris():
     api = ApiNinjas("chucknorris")
 
     message = ""
@@ -203,7 +203,7 @@ def action_apininjas_chuck_norris(update: Update, context: ContextTypes.DEFAULT_
 
 
 @actions.add(weight=10)
-def action_apininjas_dad_joke(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_apininjas_dad_joke():
     api = ApiNinjas("dadjokes", {
         "limit": 1,
     })
@@ -221,7 +221,7 @@ def action_apininjas_dad_joke(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 @actions.add(weight=4)
-def action_apininjas_quotes(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_apininjas_quotes():
     api = ApiNinjas("quotes", {
         "limit": 1,
     })
@@ -242,7 +242,7 @@ def action_apininjas_quotes(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @actions.add(weight=9)
-def action_apininjas_trivia(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_apininjas_trivia():
     api = ApiNinjas("trivia", {
         "limit": 1,
     })
@@ -264,7 +264,7 @@ def action_apininjas_trivia(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @actions.add(weight=8)
-def action_apininjas_weather(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_apininjas_weather():
     city = random.choice(list(geonamescache.GeonamesCache().get_cities().items()))[1]
     api = ApiNinjas("weather", {
         "lat": city['latitude'],
@@ -291,7 +291,7 @@ Timezone: {timezone}"""
 
 
 @actions.add(weight=10)
-def action_tim_imdb(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_tim_imdb():
     url = os.getenv("TIM_API_URL") or "https://api.timhatdiehandandermaus.consulting"
     url += "/movie?q="
     response = requests.get(url)
@@ -305,7 +305,7 @@ def action_tim_imdb(update: Update, context: ContextTypes.DEFAULT_TYPE):
     c.update(imdb_movie, info_types)
 
     if not any(info_type in imdb_movie.data.keys() for info_type in info_types):
-        return action_tim_imdb(update, context)
+        return action_tim_imdb()
 
     random.shuffle(info_types)
     for info_type in info_types:
@@ -322,7 +322,7 @@ def action_tim_imdb(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         info_text = escape_markdown(info_text)
         movie_text = escape_markdown(api_movie["imdb"]["title"])
-        text = f"""||
+        text = fr"""||
 {info_text}
 ||
 \- {movie_text} \({info_type}\)
@@ -332,7 +332,7 @@ def action_tim_imdb(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @actions.add(weight=10, message_type=MessageType.Photo)
-def action_apininjas_cats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_apininjas_cats():
     MAX_OFFSET = 62  # experimentally checked that there are 82 available items and 20 items are returned by default
     random_offset = random.randint(0, MAX_OFFSET)
     api = ApiNinjas("cats", {
@@ -353,7 +353,7 @@ def action_apininjas_cats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @actions.add(weight=10, message_type=MessageType.Photo)
-def action_the_cat_api(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_the_cat_api():
     api = TheCatApi("v1/images/search", {})
 
     try:
@@ -368,7 +368,7 @@ def action_the_cat_api(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @actions.add(weight=10, message_type=MessageType.Photo)
-def action_nasa_apod(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_nasa_apod():
     api = NasaApi("/planetary/apod", {
         "count": 1,
     })
@@ -389,7 +389,7 @@ def action_nasa_apod(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @actions.add(weight=10, message_type=MessageType.Photo)
-def action_fox(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_fox():
     url = "https://randomfox.ca/floof/"
 
     try:
@@ -404,7 +404,7 @@ def action_fox(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @actions.add(weight=10, message_type=MessageType.Photo)
-def action_dog_ceo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_dog_ceo():
     url = "https://dog.ceo/api/breeds/image/random"
 
     try:
@@ -419,7 +419,7 @@ def action_dog_ceo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @actions.add(weight=10, message_type=MessageType.Photo)
-def action_spacex(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_spacex():
     url = "https://api.spacexdata.com/v5/launches/"
 
     try:
@@ -444,6 +444,6 @@ def action_spacex(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @actions.add(weight=10, message_type=MessageType.Photo)
-def action_beemovie(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def action_beemovie():
     from . import beemovie
     return TextMessage(escape_markdown(beemovie.SCRIPT))
