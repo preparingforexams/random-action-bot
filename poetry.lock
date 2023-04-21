@@ -140,14 +140,14 @@ doc = ["sphinx", "sphinx-rtd-theme"]
 
 [[package]]
 name = "geonamescache"
-version = "1.5.0"
+version = "1.6.0"
 description = "Geonames data for continents, cities and US states."
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "geonamescache-1.5.0-py3-none-any.whl", hash = "sha256:b3af27801a42c636aaa48d978868c2698a765b5a4b2ad845e41cb68d3d010a64"},
-    {file = "geonamescache-1.5.0.tar.gz", hash = "sha256:8961055e8e9094d8c2c68610d7f6e23787be7eeb68149b2da45987a36b4b9ba5"},
+    {file = "geonamescache-1.6.0-py3-none-any.whl", hash = "sha256:c1112dda936e145a989436fd8b3ac7bf3d82b63094ccd8944eb6c7c549c19b5e"},
+    {file = "geonamescache-1.6.0.tar.gz", hash = "sha256:b140b253fdcea593edb191ba7022c3d678ad11e2bf86fa6d0a743fff4659a87b"},
 ]
 
 [[package]]
