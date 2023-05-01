@@ -120,14 +120,14 @@ files = [
 
 [[package]]
 name = "cinemagoer"
-version = "2022.12.27"
+version = "2023.5.1"
 description = "Python package to access the IMDb's database"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "cinemagoer-2022.12.27-py3-none-any.whl", hash = "sha256:9e295e2ed49fb93f2983d9b5e991e052ec48502a14bd8c53bf1ac88f95b67e6e"},
-    {file = "cinemagoer-2022.12.27.tar.gz", hash = "sha256:b94abfe948a3bfa92b04d09ae5fb41586fee60bb3fe692f20ce34bbc1a318d8a"},
+    {file = "cinemagoer-2023.5.1-py3-none-any.whl", hash = "sha256:0c6bc00fbc56cbdd58bc3dbf00cf858770fc127929408460fb28ffe2ca99f83a"},
+    {file = "cinemagoer-2023.5.1.tar.gz", hash = "sha256:5ce1d77ae6546701618f11e5b1556a19d18edecad1b6d7d96973ec34941b18f2"},
 ]
 
 [package.dependencies]
@@ -575,4 +575,4 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "6448fefc96f18fa4e3dbb0f98921c2f2100f38a238f34f464567ea56597bd170"
+content-hash = "bfe082db40d2a4c0d4220a2d4b3a3e415536e2e627849ae0fb0b7d035d57a80b"
