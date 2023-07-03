@@ -156,14 +156,14 @@ test = ["pytest (>=6)"]
 
 [[package]]
 name = "geonamescache"
-version = "1.6.0"
+version = "2.0.0"
 description = "Geonames data for continents, cities and US states."
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "geonamescache-1.6.0-py3-none-any.whl", hash = "sha256:c1112dda936e145a989436fd8b3ac7bf3d82b63094ccd8944eb6c7c549c19b5e"},
-    {file = "geonamescache-1.6.0.tar.gz", hash = "sha256:b140b253fdcea593edb191ba7022c3d678ad11e2bf86fa6d0a743fff4659a87b"},
+    {file = "geonamescache-2.0.0-py3-none-any.whl", hash = "sha256:24fdaaeaf236f88786dec8c0ab55447f5f7f95ef6c094e79fa9ef74114ea1fe2"},
+    {file = "geonamescache-2.0.0.tar.gz", hash = "sha256:fa1eed0b5b591b478ad81979081ac15b37aa6a1c00bb02431a570688e5c2ecc9"},
 ]
 
 [[package]]
@@ -575,4 +575,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "bfe082db40d2a4c0d4220a2d4b3a3e415536e2e627849ae0fb0b7d035d57a80b"
+content-hash = "92c69b4bbafb56712d3fd855415358737b269eb9ae94ea71bc63fbeec1771343"
