@@ -115,11 +115,7 @@ class TheDecider:
         self.actions = []
 
     def contains(self, function_name: str):
-        for action in self.actions:
-            if action.name() == function_name:
-                return True
-
-        return False
+        return any(action.name() == function_name for action in self.actions)
 
     def add(self, weight: float = 10, message_type: MessageType = MessageType.Text):
         def wrapper(f: Callable[[Update, ContextTypes], str]):
