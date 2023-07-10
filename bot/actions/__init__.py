@@ -448,3 +448,19 @@ def action_spacex():
 def action_beemovie():
     from . import beemovie
     return TextMessage(escape_markdown(beemovie.SCRIPT))
+
+
+@actions.add(weight=10, message_type=MessageType.Photo)
+def action_xkcd():
+    from .xkcd import Xkcd
+    try:
+        response = Xkcd().get_random()
+    except RequestError as e:
+        return TextMessage(escape_markdown("\n".join(e.args)))
+
+    if response.ok:
+        comic = response.json()
+        caption = escape_markdown(comic.get("alt", ""))
+        return PhotoMessage(comic["img"], caption)
+
+    return None
