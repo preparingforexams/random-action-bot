@@ -54,22 +54,22 @@ class TextMessage(Message):
     def split(self) -> List[str]:
         message_length = 4096
         messages: List[List[str]] = []
-        current_length = 0
-        current_message = 0
+        current_message_length = 0
+        current_message_index = 0
         join_by_length = len(self.join_with)
         lines = self.text.split(self.split_by)
 
         for line in lines:
-            if len(messages) <= current_message:
+            if len(messages) <= current_message_index:
                 messages.append([])
 
             line_length = len(line)
-            if current_length + line_length + (len(messages[current_message]) * join_by_length) < message_length:
-                current_length += line_length
-                messages[current_message].append(line)
+            if current_message_length + line_length + (len(messages[current_message_index]) * join_by_length) < message_length:
+                current_message_length += line_length
+                messages[current_message_index].append(line)
             else:
-                current_length = 0
-                current_message += 1
+                current_message_length = 0
+                current_message_index += 1
 
         return [self.join_with.join(entry) for entry in messages]
 
