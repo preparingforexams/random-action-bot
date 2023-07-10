@@ -32,7 +32,7 @@ class Message:
 
     @abstractmethod
     async def send(self, update: Update):
-        pass
+        raise NotImplementedError("subclasses of `Message` must imlpement `send`")
 
 
 @dataclasses.dataclass
