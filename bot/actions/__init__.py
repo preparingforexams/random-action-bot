@@ -114,8 +114,18 @@ class TheDecider:
     def __init__(self):
         self.actions = []
 
+    def contains(self, function_name: str):
+        for action in self.actions:
+            if action.name() == function_name:
+                return True
+
+        return False
+
     def add(self, weight: float = 10, message_type: MessageType = MessageType.Text):
         def wrapper(f: Callable[[Update, ContextTypes], str]):
+            if self.contains(f.__name__):
+                raise Exception(f"`{f.__name__}` is defined multiple times")
+
             self.actions.append(Action(f, weight, message_type))
 
             return f
