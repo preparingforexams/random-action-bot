@@ -44,7 +44,7 @@ class TextMessage(Message):
             await update.effective_message.reply_text(message, parse_mode=self.parse_mode,
                                                       disable_notification=not first)
             first = False
-            time.sleep(0.5)
+            time.sleep(1.5)
 
     type = MessageType.Text
     text: str
