@@ -2,7 +2,7 @@
 name = "randomfunctionbot"
 version = "0.1.0"
 description = "replies with a random action to commands (non-deterministic)"
-authors = ["OpenAlcoholics <team@openalcoholics.group>"]
+authors = ["BlindfoldedSurgery <team@blindfolded.surgery>"]
 license = "MIT"
 readme = "README.md"
 
