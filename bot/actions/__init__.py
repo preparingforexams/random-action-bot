@@ -16,6 +16,7 @@ from telegram.ext import ContextTypes
 
 from .apininjas import ApiNinjas
 from .nasaapi import NasaApi
+from .stations import STATIONS
 from .thecatapi import TheCatApi
 from .utils import escape_markdown, get_json_from_url, RequestError
 from ..logger import create_logger
@@ -66,7 +67,8 @@ class TextMessage(Message):
                 messages.append([])
 
             line_length = len(line)
-            if current_message_length + line_length + (len(messages[current_message_index]) * join_by_length) < message_length:
+            if current_message_length + line_length + (
+                    len(messages[current_message_index]) * join_by_length) < message_length:
                 current_message_length += line_length
                 messages[current_message_index].append(line)
                 line_index += 1
@@ -473,3 +475,12 @@ def action_xkcd():
         return PhotoMessage(comic["img"], caption)
 
     return None
+
+
+@actions.add(weight=10, message_type=MessageType.Text)
+def action_station():
+    random_region = random.choice(list(STATIONS.keys()))
+    station = random.choice(STATIONS[random_region])
+
+    message = TextMessage(f"[{escape_markdown(station['name'])}]({station['link']})")
+    return message
