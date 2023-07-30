@@ -16,7 +16,7 @@ from telegram.ext import ContextTypes
 
 from .apininjas import ApiNinjas
 from .nasaapi import NasaApi
-from .stations import STATIONS
+from .stations import get_stations
 from .thecatapi import TheCatApi
 from .utils import escape_markdown, get_json_from_url, RequestError
 from ..logger import create_logger
@@ -479,8 +479,7 @@ def action_xkcd():
 
 @actions.add(weight=10, message_type=MessageType.Text)
 def action_station():
-    random_region = random.choice(list(STATIONS.keys()))
-    station = random.choice(STATIONS[random_region])
+    station = random.choice(get_stations())
 
-    message = TextMessage(f"[{escape_markdown(station['name'])}]({station['link']})")
+    message = TextMessage(str(station))
     return message

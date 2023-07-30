@@ -1,160 +1,131 @@
-STATIONS = {"Schleswig-Holstein":
-                [{'link': 'https://bahnauskunft.info/bahnhof/achterwehr/', 'name': 'Achterwehr'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/ahrensburg/', 'name': 'Ahrensburg'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/ahrensburg-gartenholz/',
-                  'name': 'Ahrensburg-Gartenholz'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/albersdorf/', 'name': 'Albersdorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/altengoers/', 'name': 'Altengörs'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/ascheberg-holstein/',
-                  'name': 'Ascheberg'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/aukrug/', 'name': 'Aukrug'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/aumuehle/', 'name': 'Aumühle'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/bad-malente-gremsmuehlen/',
-                  'name': 'Bad'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/bad-oldesloe/', 'name': 'Bad'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/bad-schwartau/', 'name': 'Bad'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/bad-segeberg/', 'name': 'Bad'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/bad-st-peter-sued/', 'name': 'Bad'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/bad-st-peter-ording/', 'name': 'Bad'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/bargteheide/', 'name': 'Bargteheide'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/beldorf/', 'name': 'Beldorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/beringstedt/', 'name': 'Beringstedt'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/bordesholm/', 'name': 'Bordesholm'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/bredenbek/', 'name': 'Bredenbek'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/bredstedt/', 'name': 'Bredstedt'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/brokstedt/', 'name': 'Brokstedt'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/buechen/', 'name': 'Büchen'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/burg-dithm/', 'name': 'Burg'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/buesum/', 'name': 'Büsum'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/dauenhof/', 'name': 'Dauenhof'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/eckernfoerde/', 'name': 'Eckernförde'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/einfeld/', 'name': 'Einfeld'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/elmshorn/', 'name': 'Elmshorn'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/eutin/', 'name': 'Eutin'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/fahrenkrug/', 'name': 'Fahrenkrug'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/felde/', 'name': 'Felde'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/flensburg/', 'name': 'Flensburg'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/flintbek/', 'name': 'Flintbek'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/fresenburg/', 'name': 'Fresenburg'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/friedrichsruh/',
-                  'name': 'Friedrichsruh'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/friedrichstadt/',
-                  'name': 'Friedrichstadt'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/garding/', 'name': 'Garding'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/gettorf/', 'name': 'Gettorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/glueckstadt/', 'name': 'Glückstadt'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/gokels/', 'name': 'Gokels'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/grossenbrode/', 'name': 'Großenbrode'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/hademarschen/', 'name': 'Hademarschen'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/haffkrug/', 'name': 'Haffkrug'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/halstenbek/', 'name': 'Halstenbek'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/harblek/', 'name': 'Harblek'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/heide-holstein/', 'name': 'Heide'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/herzhorn/', 'name': 'Herzhorn'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/hohenwestedt/', 'name': 'Hohenwestedt'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/horst-holstein/', 'name': 'Horst'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/husby/', 'name': 'Husby'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/husum/', 'name': 'Husum'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/itzehoe/', 'name': 'Itzehoe'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/jarrenwisch/', 'name': 'Jarrenwisch'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/juebek/', 'name': 'Jübek'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/katharinenheerd/',
-                  'name': 'Katharinenheerd'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/kating/', 'name': 'Kating'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/keitum-sylt/', 'name': 'Keitum'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/kiel-hauptbahnhof/', 'name': 'Kiel'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/kiel-elmschenhagen/',
-                  'name': 'Kiel-Elmschenhagen'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/kiel-hassee-cittipark/',
-                  'name': 'Kiel-Hassee'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/kiel-russee/', 'name': 'Kiel-Russee'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/klanxbuell/', 'name': 'Klanxbüll'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/krempe/', 'name': 'Krempe'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/kremperheide/', 'name': 'Kremperheide'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/kronshagen/', 'name': 'Kronshagen'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/krupunder/', 'name': 'Krupunder'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/kupfermuehle/', 'name': 'Kupfermühle'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/langenhorn-schleswig/',
-                  'name': 'Langenhorn'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/lauenburg-elbe/', 'name': 'Lauenburg'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/lensahn/', 'name': 'Lensahn'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/luebeck-daenischburg-ikea/',
-                  'name': 'Lübeck'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/luebeck-hauptbahnhof/',
-                  'name': 'Lübeck'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/luebeck-hochschulstadtteil/',
-                  'name': 'Lübeck'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/luebeck-flughafen/',
-                  'name': 'Lübeck-Flughafen'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/luebeck-kuecknitz/',
-                  'name': 'Lübeck-Kücknitz'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/luebeck-st-juergen/',
-                  'name': 'Lübeck-St.'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/luebeck-travemuende-hafen/',
-                  'name': 'Lübeck-Travemünde'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/luebeck-travemuende-skandinavienkai/',
-                  'name': 'Lübeck-Travemünde'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/luebeck-travemuende-strand/',
-                  'name': 'Lübeck-Travemünde'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/lunden/', 'name': 'Lunden'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/meldorf/', 'name': 'Meldorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/melsdorf/', 'name': 'Melsdorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/moelln-lauenburg/', 'name': 'Mölln'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/morsum-sylt/', 'name': 'Morsum'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/muessen/', 'name': 'Müssen'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/neumuenster/', 'name': 'Neumünster'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/neumuenster-stadtwald/',
-                  'name': 'Neumünster'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/neustadt-holstein/', 'name': 'Neustadt'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/niebuell/', 'name': 'Niebüll'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/nordhastedt/', 'name': 'Nordhastedt'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/nortorf/', 'name': 'Nortorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/oldenburg-holstein/',
-                  'name': 'Oldenburg'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/osterstedt/', 'name': 'Osterstedt'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/owschlag/', 'name': 'Owschlag'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/pansdorf/', 'name': 'Pansdorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/pinneberg/', 'name': 'Pinneberg'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/ploen/', 'name': 'Plön'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/poenitz-holstein/', 'name': 'Pönitz'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/preetz/', 'name': 'Preetz'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/prisdorf/', 'name': 'Prisdorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/puttgarden/', 'name': 'Puttgarden'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/raisdorf/', 'name': 'Raisdorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/ratzeburg/', 'name': 'Ratzeburg'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/reinbek/', 'name': 'Reinbek'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/reinfeld-holstein/', 'name': 'Reinfeld'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/reinsbuettel/', 'name': 'Reinsbüttel'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/rendsburg/', 'name': 'Rendsburg'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/rickling/', 'name': 'Rickling'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/rieseby/', 'name': 'Rieseby'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/sandwehle/', 'name': 'Sandwehle'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/scharbeutz/', 'name': 'Scharbeutz'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/schleswig/', 'name': 'Schleswig'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/schuelldorf/', 'name': 'Schülldorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/schwarzenbek/', 'name': 'Schwarzenbek'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/sierksdorf/', 'name': 'Sierksdorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/soerup/', 'name': 'Sörup'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/st-michaelisdonn/', 'name': 'St.'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/suchsdorf/', 'name': 'Suchsdorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/suederbrarup/', 'name': 'Süderbrarup'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/suederdeich/', 'name': 'Süderdeich'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/tarp/', 'name': 'Tarp'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/tating/', 'name': 'Tating'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/thesdorf/', 'name': 'Thesdorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/tiebensee/', 'name': 'Tiebensee'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/timmendorferstrand/',
-                  'name': 'Timmendorferstrand'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/toenning/', 'name': 'Tönning'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/tornesch/', 'name': 'Tornesch'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/wahlstedt/', 'name': 'Wahlstedt'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/wakendorf/', 'name': 'Wakendorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/wasbek/', 'name': 'Wasbek'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/wedel-holstein/', 'name': 'Wedel'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/wesselburen/', 'name': 'Wesselburen'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/westerland-sylt/', 'name': 'Westerland'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/wilster/', 'name': 'Wilster'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/witzwort/', 'name': 'Witzwort'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/wohltorf/', 'name': 'Wohltorf'},
-                 {'link': 'https://bahnauskunft.info/bahnhof/wrist/', 'name': 'Wrist'}]
-            }
+import dataclasses
+import unicodedata
+from enum import Enum
+from functools import lru_cache
+from typing import Optional, Self
+
+import requests
+from bs4 import BeautifulSoup, Tag
+
+from bot import actions
+
+
+class StationType(Enum):
+    BAHNHOF = "Bahnhof"
+    HALTEPUNKT = "Haltepunkt"
+
+    @classmethod
+    def from_str(cls, s: str) -> Self:
+        if s.lower() == "hp":
+            return cls.HALTEPUNKT
+
+        return cls.BAHNHOF
+
+    def __str__(self):
+        return self.value
+
+
+class StopType(Enum):
+    F = "Fernverkehrshalt"
+    R = "Regionalverkehrshalt"
+    S = "S-Bahn"
+
+    @classmethod
+    def from_columns(cls, c1: str, c2: str, c3: str):
+        if len(c1) != 0:
+            return cls.F
+        elif len(c2) != 0:
+            return cls.R
+
+        return cls.S
+
+    def __str__(self):
+        return self.value
+
+
+@dataclasses.dataclass
+class Station:
+    name: str
+    name_link: str
+    type: StationType
+    tracks: Optional[int]
+    town: str
+    town_link: str
+    district: str
+    opening: str
+    transport_association: str
+    category: str
+    stop_type: StopType
+    route: str
+    route_link: str
+    notes: str
+    _raw: str
+
+    def __str__(self):
+        return f"""
+Name: [{actions.escape_markdown(self.name)}]({self.name_link})
+Betriebsstelle: {actions.escape_markdown(str(self.type))}
+Gleise: {self.tracks}
+Stadt: [{actions.escape_markdown(self.town)}]({self.town_link})
+Kreis: {actions.escape_markdown(self.district)}
+Eröffnung: {actions.escape_markdown(self.opening)}
+Verkehrsverbund: {actions.escape_markdown(self.transport_association)}
+Kategorie: {actions.escape_markdown(self.category)}
+Halt\-Typ: {actions.escape_markdown(str(self.stop_type))}
+Strecke: [{actions.escape_markdown(self.route)}]({self.route_link})
+Anmerkungen: {actions.escape_markdown(self.notes)}"""
+
+
+def get_link(t: Tag) -> str:
+    a = t.find("a")
+    if not a:
+        return " "
+
+    link = a["href"]
+    if not link.startswith("https://"):
+        link = f"https://de.wikipedia.org/{link}"
+
+    return link
+
+
+@lru_cache()
+def get_stations() -> Optional[list[Station]]:
+    response = requests.get("https://de.wikipedia.org/wiki/Liste_der_Personenbahnh%C3%B6fe_in_Schleswig-Holstein")
+    if not response.ok:
+        return None
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+    out = soup.find_all("table")
+    table = out[1]
+    body = table.find("tbody")
+    rows = body.find_all("tr")
+
+    stations = []
+    for row in rows[1:]:
+        columns = row.find_all("td")
+        tracks = int(unicodedata.normalize("NFKD", " ".join(columns[2].strings))) if " ".join(
+            columns[2].strings) else None
+
+        station = Station(
+            unicodedata.normalize("NFKD", " ".join(columns[0].strings)),
+            get_link(columns[0]),
+            StationType.from_str(unicodedata.normalize("NFKD", " ".join(columns[1].strings))),
+            tracks,
+            unicodedata.normalize("NFKD", " ".join(columns[3].strings)),
+            get_link(columns[3]),
+            unicodedata.normalize("NFKD", " ".join(columns[4].strings)),
+            unicodedata.normalize("NFKD", " ".join(columns[5].strings)),
+            unicodedata.normalize("NFKD", " ".join(columns[6].strings)),
+            unicodedata.normalize("NFKD", " ".join(columns[7].strings)),
+            StopType.from_columns(unicodedata.normalize("NFKD", " ".join(columns[8].strings)),
+                                  unicodedata.normalize("NFKD", " ".join(columns[9].strings)),
+                                  unicodedata.normalize("NFKD", " ".join(columns[10].strings))),
+            get_link(columns[10]),
+            unicodedata.normalize("NFKD", " ".join(columns[11].strings)),
+            unicodedata.normalize("NFKD", " ".join(columns[12].strings)).strip(),
+            row
+        )
+
+        stations.append(station)
+
+    return stations
