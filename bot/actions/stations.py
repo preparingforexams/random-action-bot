@@ -51,7 +51,7 @@ def format_routes(route_tag: Tag) -> str:
             link = f"https://de.wikipedia.org{link}"
         if not link:
             link = " "
-        routes.append(f"[{actions.escape_markdown(a.text)}]({link})")
+        routes.append(f"[{actions.escape_markdown(a.text)}]({actions.escape_markdown(link)})")
 
     return "\n".join(routes)
 
@@ -97,7 +97,7 @@ def get_link(t: Tag) -> str:
     if not link.startswith("https://"):
         link = f"https://de.wikipedia.org/{link}"
 
-    return link
+    return actions.escape_markdown(link)
 
 
 @lru_cache()
