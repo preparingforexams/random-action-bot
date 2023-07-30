@@ -43,6 +43,19 @@ class StopType(Enum):
         return self.value
 
 
+def format_routes(route_tag: Tag) -> str:
+    routes = []
+    for a in route_tag.find_all("a"):
+        link = a['href']
+        if not link.startswith("https://"):
+            link = f"https://de.wikipedia.org{link}"
+        if not link:
+            link = " "
+        routes.append(f"[{actions.escape_markdown(a.text)}]({link})")
+
+    return "\n".join(routes)
+
+
 @dataclasses.dataclass
 class Station:
     name: str
@@ -56,8 +69,7 @@ class Station:
     transport_association: str
     category: str
     stop_type: StopType
-    route: str
-    route_link: str
+    route_tag: Tag
     notes: str
     _raw: str
 
@@ -72,7 +84,7 @@ Eröffnung: {actions.escape_markdown(self.opening)}
 Verkehrsverbund: {actions.escape_markdown(self.transport_association)}
 Kategorie: {actions.escape_markdown(self.category)}
 Halt\-Typ: {actions.escape_markdown(str(self.stop_type))}
-Strecke: [{actions.escape_markdown(self.route)}]({self.route_link})
+Strecke: {format_routes(self.route_tag)}
 Anmerkungen: {actions.escape_markdown(self.notes)}"""
 
 
@@ -120,8 +132,7 @@ def get_stations() -> Optional[list[Station]]:
             StopType.from_columns(unicodedata.normalize("NFKD", " ".join(columns[8].strings)),
                                   unicodedata.normalize("NFKD", " ".join(columns[9].strings)),
                                   unicodedata.normalize("NFKD", " ".join(columns[10].strings))),
-            unicodedata.normalize("NFKD", " ".join(columns[11].strings)),
-            get_link(columns[11]),
+            columns[11],
             unicodedata.normalize("NFKD", " ".join(columns[12].strings)).strip(),
             row
         )
