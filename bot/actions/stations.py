@@ -120,8 +120,8 @@ def get_stations() -> Optional[list[Station]]:
             StopType.from_columns(unicodedata.normalize("NFKD", " ".join(columns[8].strings)),
                                   unicodedata.normalize("NFKD", " ".join(columns[9].strings)),
                                   unicodedata.normalize("NFKD", " ".join(columns[10].strings))),
-            get_link(columns[10]),
             unicodedata.normalize("NFKD", " ".join(columns[11].strings)),
+            get_link(columns[11]),
             unicodedata.normalize("NFKD", " ".join(columns[12].strings)).strip(),
             row
         )

@@ -479,7 +479,10 @@ def action_xkcd():
 
 @actions.add(weight=10, message_type=MessageType.Text)
 def action_station():
+    log = create_logger(inspect.currentframe().f_code.co_name)
+
     station = random.choice(get_stations())
+    log.debug(f"{station.name}")
 
     message = TextMessage(str(station))
     return message
