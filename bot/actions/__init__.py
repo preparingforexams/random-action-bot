@@ -301,7 +301,7 @@ Timezone: {timezone}"""
     return TextMessage(message)
 
 
-@actions.add(weight=10)
+# @actions.add(weight=10)
 def action_tim_imdb():
     url = os.getenv("TIM_API_URL") or "https://api.timhatdiehandandermaus.consulting"
     url += "/movie?q="
