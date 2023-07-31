@@ -100,6 +100,14 @@ def get_link(t: Tag) -> str:
     return actions.escape_markdown(link)
 
 
+def normalize_column_strings(columns: list[Tag], unicode_form: str = "NFKD") -> list[str]:
+    return [
+        unicodedata.normalize(unicode_form, " ".join(column.strings))
+        for column
+        in columns
+    ]
+
+
 @lru_cache()
 def get_stations() -> Optional[list[Station]]:
     response = requests.get("https://de.wikipedia.org/wiki/Liste_der_Personenbahnh%C3%B6fe_in_Schleswig-Holstein")
@@ -114,26 +122,24 @@ def get_stations() -> Optional[list[Station]]:
 
     stations = []
     for row in rows[1:]:
-        columns = row.find_all("td")
-        tracks = int(unicodedata.normalize("NFKD", " ".join(columns[2].strings))) if " ".join(
-            columns[2].strings) else None
+        columns: list[Tag] = row.find_all("td")
+        column_strings = normalize_column_strings(columns)
+        tracks = int(column_strings[2]) if column_strings[2] else None
 
         station = Station(
-            unicodedata.normalize("NFKD", " ".join(columns[0].strings)),
+            column_strings[0],
             get_link(columns[0]),
-            StationType.from_str(unicodedata.normalize("NFKD", " ".join(columns[1].strings))),
+            StationType.from_str(column_strings[1]),
             tracks,
-            unicodedata.normalize("NFKD", " ".join(columns[3].strings)),
+            column_strings[3],
             get_link(columns[3]),
-            unicodedata.normalize("NFKD", " ".join(columns[4].strings)),
-            unicodedata.normalize("NFKD", " ".join(columns[5].strings)),
-            unicodedata.normalize("NFKD", " ".join(columns[6].strings)),
-            unicodedata.normalize("NFKD", " ".join(columns[7].strings)),
-            StopType.from_columns(unicodedata.normalize("NFKD", " ".join(columns[8].strings)),
-                                  unicodedata.normalize("NFKD", " ".join(columns[9].strings)),
-                                  unicodedata.normalize("NFKD", " ".join(columns[10].strings))),
+            column_strings[4],
+            column_strings[5],
+            column_strings[6],
+            column_strings[7],
+            StopType.from_columns(column_strings[8], column_strings[9], column_strings[10]),
             columns[11],
-            unicodedata.normalize("NFKD", " ".join(columns[12].strings)).strip(),
+            column_strings[12],
             row
         )
 
