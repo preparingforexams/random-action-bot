@@ -127,20 +127,20 @@ def get_stations() -> Optional[list[Station]]:
         tracks = int(column_strings[2]) if column_strings[2] else None
 
         station = Station(
-            column_strings[0],
-            get_link(columns[0]),
-            StationType.from_str(column_strings[1]),
-            tracks,
-            column_strings[3],
-            get_link(columns[3]),
-            column_strings[4],
-            column_strings[5],
-            column_strings[6],
-            column_strings[7],
-            StopType.from_columns(column_strings[8], column_strings[9], column_strings[10]),
-            columns[11],
-            column_strings[12],
-            row
+            name=column_strings[0],
+            name_link=get_link(columns[0]),
+            type=StationType.from_str(column_strings[1]),
+            tracks=tracks,
+            town=column_strings[3],
+            town_link=get_link(columns[3]),
+            district=column_strings[4],
+            opening=column_strings[5],
+            transport_association=column_strings[6],
+            category=column_strings[7],
+            stop_type=StopType.from_columns(column_strings[8], column_strings[9], column_strings[10]),
+            route_tag=columns[11],
+            notes=column_strings[12],
+            _raw=row
         )
 
         stations.append(station)
