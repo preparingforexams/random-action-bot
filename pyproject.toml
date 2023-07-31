@@ -14,7 +14,9 @@ geonamescache = "^2.0.0"
 cinemagoer = "^2023.0.0"
 beautifulsoup4 = "^4.12.2"
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 110

@@ -46,7 +46,7 @@ class StopType(Enum):
 def format_routes(route_tag: Tag) -> str:
     routes = []
     for a in route_tag.find_all("a"):
-        link = a['href']
+        link = a["href"]
         if not link.startswith("https://"):
             link = f"https://de.wikipedia.org{link}"
         if not link:
@@ -74,7 +74,7 @@ class Station:
     _raw: str
 
     def __str__(self):
-        return fr"""
+        return rf"""
 Name: [{actions.escape_markdown(self.name)}]({self.name_link})
 Betriebsstelle: {actions.escape_markdown(str(self.type))}
 Gleise: {self.tracks}
@@ -101,20 +101,18 @@ def get_link(t: Tag) -> str:
 
 
 def normalize_column_strings(columns: list[Tag], unicode_form: str = "NFKD") -> list[str]:
-    return [
-        unicodedata.normalize(unicode_form, " ".join(column.strings))
-        for column
-        in columns
-    ]
+    return [unicodedata.normalize(unicode_form, " ".join(column.strings)) for column in columns]
 
 
 @lru_cache()
 def get_stations() -> Optional[list[Station]]:
-    response = requests.get("https://de.wikipedia.org/wiki/Liste_der_Personenbahnh%C3%B6fe_in_Schleswig-Holstein")
+    response = requests.get(
+        "https://de.wikipedia.org/wiki/Liste_der_Personenbahnh%C3%B6fe_in_Schleswig-Holstein"
+    )
     if not response.ok:
         return None
 
-    soup = BeautifulSoup(response.text, 'html.parser')
+    soup = BeautifulSoup(response.text, "html.parser")
     out = soup.find_all("table")
     table = out[1]
     body = table.find("tbody")
@@ -140,7 +138,7 @@ def get_stations() -> Optional[list[Station]]:
             stop_type=StopType.from_columns(column_strings[8], column_strings[9], column_strings[10]),
             route_tag=columns[11],
             notes=column_strings[12],
-            _raw=row
+            _raw=row,
         )
 
         stations.append(station)

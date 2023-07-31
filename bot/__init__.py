@@ -18,7 +18,9 @@ def send_telegram_error_message(message: str, *, _: Update = None):
 async def random_action(update: Update, _: ContextTypes.DEFAULT_TYPE):
     log = create_logger(inspect.currentframe().f_code.co_name)
 
-    text = update.effective_message.text if update.effective_message.text else update.effective_message.caption
+    text = (
+        update.effective_message.text if update.effective_message.text else update.effective_message.caption
+    )
     if not (text and text.startswith("/")):
         return
 
@@ -33,4 +35,6 @@ async def random_action(update: Update, _: ContextTypes.DEFAULT_TYPE):
 
 async def weights(update: Update, _: ContextTypes.DEFAULT_TYPE):
     message = str(actions.actions)
-    return await update.effective_message.reply_text(message, parse_mode=telegram.constants.ParseMode.MARKDOWN_V2)
+    return await update.effective_message.reply_text(
+        message, parse_mode=telegram.constants.ParseMode.MARKDOWN_V2
+    )
