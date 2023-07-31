@@ -74,7 +74,7 @@ class Station:
     _raw: str
 
     def __str__(self):
-        return f"""
+        return fr"""
 Name: [{actions.escape_markdown(self.name)}]({self.name_link})
 Betriebsstelle: {actions.escape_markdown(str(self.type))}
 Gleise: {self.tracks}
