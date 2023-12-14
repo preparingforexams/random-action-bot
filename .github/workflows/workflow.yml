@@ -36,8 +36,11 @@ jobs:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
       - run: jb install
-      - name: install helm chart
-        run: |
+      - run: 'echo "$KUBECONFIG_RAW" > $HOME/.kube/config'
+        shell: bash
+        env:
+          KUBECONFIG_RAW: ${{ secrets.KUBECONFIG_RAW }}
+      - run: |
           tk apply --auto-approve always -V "BOT_TOKEN=$BOT_TOKEN" -V "API_NINJAS_KEY=$API_NINJAS_KEY" -V "THE_CATS_API_KEY=$THE_CATS_API_KEY" -V "NASA_API_KEY=$NASA_API_KEY" environments/default
 
   clean:
