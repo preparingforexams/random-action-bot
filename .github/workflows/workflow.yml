@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sed -i 's/python.*//' .tool-versions
-      - uses: asdf-vm/actions/install@v2
+      - uses: asdf-vm/actions/install@v3
       - run: jb install
       - run: tk lint environments/default
       - run: tk apply --dry-run=client -V "BOT_TOKEN=$BOT_TOKEN" -V "API_NINJAS_KEY=$API_NINJAS_KEY" -V "THE_CATS_API_KEY=$THE_CATS_API_KEY" -V "NASA_API_KEY=$NASA_API_KEY" environments/default
@@ -32,7 +32,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sed -i 's/python.*//' .tool-versions
-      - uses: asdf-vm/actions/install@v2
+      - uses: asdf-vm/actions/install@v3
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
       - run: jb install
