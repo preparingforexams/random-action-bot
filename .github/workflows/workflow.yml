@@ -35,6 +35,7 @@ jobs:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
       - run: jb install
+      - run: mkdir $HOME/.kube
       - run: 'echo "$KUBECONFIG_RAW" > $HOME/.kube/config'
         shell: bash
         env:
