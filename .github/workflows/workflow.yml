@@ -16,7 +16,6 @@ jobs:
       - uses: asdf-vm/actions/install@v2
       - run: jb install
       - run: tk lint environments/default
-      - run: tk apply --dry-run=client -V "BOT_TOKEN=$BOT_TOKEN" -V "API_NINJAS_KEY=$API_NINJAS_KEY" -V "THE_CATS_API_KEY=$THE_CATS_API_KEY" -V "NASA_API_KEY=$NASA_API_KEY" environments/default
 
   build-container-image:
     needs:
