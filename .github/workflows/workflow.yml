@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - run: sed -i 's/python.*//' .tool-versions
       - uses: asdf-vm/actions/install@v2
       - run: tk lint environments/default
       - run: tk show environments/default
@@ -29,6 +30,7 @@ jobs:
     concurrency: production
     steps:
       - uses: actions/checkout@v4
+      - run: sed -i 's/python.*//' .tool-versions
       - uses: asdf-vm/actions/install@v2
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
