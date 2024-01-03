@@ -24,7 +24,9 @@ async def random_action(update: Update, _: ContextTypes.DEFAULT_TYPE):
     if not (text and text.startswith("/")):
         return
 
-    action = actions.actions.find(update.effective_message.text.replace("/", ""))
+    command = update.effective_message.text.replace("/", "")
+    command = command.split("@", maxsplit=1)[0]
+    action = actions.actions.find(command)
     if not action:
         action = actions.actions.random()
 
