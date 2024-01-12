@@ -159,7 +159,9 @@ actions = TheDecider()
 
 @actions.add(weight=10)
 def action_random_phrase():
-    return TextMessage(escape_markdown(random.choice(["Hello World!", "This command is not supported"])))
+    return TextMessage(
+        escape_markdown(random.choice(["Hello World!", "This command is not supported", "I don't like you"]))
+    )
 
 
 @actions.add(weight=10)
