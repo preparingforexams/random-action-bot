@@ -33,13 +33,22 @@ jobs:
       - run: sed -i 's/python.*//' .tool-versions
       - uses: asdf-vm/actions/install@v3
       - run: jb install
-      - run: mkdir $HOME/.kube
-      - run: 'echo "$KUBECONFIG_RAW" > $HOME/.kube/config'
-        shell: bash
+      - uses: rlespinasse/github-slug-action@v4
+      - uses: BlindfoldedSurgery/actions-tanka@main
         env:
-          KUBECONFIG_RAW: ${{ secrets.KUBECONFIG_RAW }}
-      - run: |
-          tk apply --auto-approve always -V "BOT_TOKEN=${{ secrets.BOT_TOKEN }}" -V "API_NINJAS_KEY=${{ secrets.API_NINJAS_KEY }}" -V "THE_CATS_API_KEY=${{ secrets.THE_CATS_API_KEY }}" -V "NASA_API_KEY=${{ secrets.NASA_API_KEY }}" environments/default
+          IMAGE_NAME: "ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}"
+        with:
+          subcommand: apply
+          environment: default
+          auto_approve: always
+          ext_str: |
+            BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+            IMAGE_NAME=${IMAGE_NAME}
+            IMAGE_TAG=${GITHUB_SHA}
+            API_NINJAS_KEY=${{ secrets.API_NINJAS_KEY }}
+            THE_CATS_API_KEY=${{ secrets.THE_CATS_API_KEY }}
+            NASA_API_KEY=${{ secrets.NASA_API_KEY }}
+          kubeconfig: ${{ secrets.KUBECONFIG_RAW }}
 
   clean:
     concurrency: cleanup

@@ -4,7 +4,7 @@ local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet'
   config:: {
     sts: {
       name: 'randomactionbot',
-      image: 'ghcr.io/preparingforexams/random-action-bot:a41b6f4614038c326e3eeb00702287ba93fa43db',
+      image: std.join(":", [std.extVar("IMAGE_NAME"), std.extVar("IMAGE_TAG")]),
     },
     secret: {
       name: 'random-action-bot',
