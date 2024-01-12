@@ -42,8 +42,9 @@ class TextMessage(Message):
         messages = self.split()
         first = True
         for message in messages:
-            await update.effective_message.reply_text(message, parse_mode=self.parse_mode,
-                                                      disable_notification=not first)
+            await update.effective_message.reply_text(
+                message, parse_mode=self.parse_mode, disable_notification=not first
+            )
             first = False
             time.sleep(1)
 
@@ -67,8 +68,10 @@ class TextMessage(Message):
                 messages.append([])
 
             line_length = len(line)
-            if current_message_length + line_length + (
-                    len(messages[current_message_index]) * join_by_length) < message_length:
+            if (
+                current_message_length + line_length + (len(messages[current_message_index]) * join_by_length)
+                < message_length
+            ):
                 current_message_length += line_length
                 messages[current_message_index].append(line)
                 line_index += 1
@@ -94,7 +97,7 @@ class PhotoMessage(Message):
 
 
 def function_to_md(f: Callable):
-    return escape_markdown(f.__name__.replace('action_', ''))
+    return escape_markdown(f.__name__.replace("action_", ""))
 
 
 @dataclasses.dataclass
@@ -110,7 +113,7 @@ class Action:
         return self._f.__name__
 
     def __str__(self):
-        return fr"/{function_to_md(self._f)}: {self.weight} \({self.type.value}\)"
+        return rf"/{function_to_md(self._f)}: {self.weight} \({self.type.value}\)"
 
 
 class TheDecider:
@@ -156,10 +159,7 @@ actions = TheDecider()
 
 @actions.add(weight=10)
 def action_random_phrase():
-    return TextMessage(escape_markdown(random.choice([
-        "Hello World!",
-        "This command is not supported",
-    ])))
+    return TextMessage(escape_markdown(random.choice(["Hello World!", "This command is not supported"])))
 
 
 @actions.add(weight=10)
@@ -176,16 +176,21 @@ def action_official_joke_api():
 
     setup = escape_markdown(joke["setup"])
     punchline = escape_markdown(joke["punchline"])
-    return TextMessage(f"""{setup}
+    return TextMessage(
+        f"""{setup}
 
-||{punchline}||""")
+||{punchline}||"""
+    )
 
 
 @actions.add(weight=5)
 def action_apininjas_facts():
-    api = ApiNinjas("facts", {
-        "limit": 1,
-    })
+    api = ApiNinjas(
+        "facts",
+        {
+            "limit": 1,
+        },
+    )
 
     message = ""
     try:
@@ -215,9 +220,12 @@ def action_apininjas_chuck_norris():
 
 @actions.add(weight=10)
 def action_apininjas_dad_joke():
-    api = ApiNinjas("dadjokes", {
-        "limit": 1,
-    })
+    api = ApiNinjas(
+        "dadjokes",
+        {
+            "limit": 1,
+        },
+    )
 
     message = ""
     try:
@@ -233,9 +241,12 @@ def action_apininjas_dad_joke():
 
 @actions.add(weight=4)
 def action_apininjas_quotes():
-    api = ApiNinjas("quotes", {
-        "limit": 1,
-    })
+    api = ApiNinjas(
+        "quotes",
+        {
+            "limit": 1,
+        },
+    )
 
     message = ""
     try:
@@ -246,7 +257,7 @@ def action_apininjas_quotes():
     if res:
         quote = escape_markdown(res[0]["quote"])
         author = escape_markdown(res[0]["author"])
-        message = fr""""{quote}"
+        message = rf""""{quote}"
 \- _{author}_"""
 
     return TextMessage(message)
@@ -254,9 +265,12 @@ def action_apininjas_quotes():
 
 @actions.add(weight=9)
 def action_apininjas_trivia():
-    api = ApiNinjas("trivia", {
-        "limit": 1,
-    })
+    api = ApiNinjas(
+        "trivia",
+        {
+            "limit": 1,
+        },
+    )
 
     message = ""
     try:
@@ -277,10 +291,13 @@ def action_apininjas_trivia():
 @actions.add(weight=8)
 def action_apininjas_weather():
     city = random.choice(list(geonamescache.GeonamesCache().get_cities().items()))[1]
-    api = ApiNinjas("weather", {
-        "lat": city['latitude'],
-        "lon": city['longitude'],
-    })
+    api = ApiNinjas(
+        "weather",
+        {
+            "lat": city["latitude"],
+            "lon": city["longitude"],
+        },
+    )
 
     message = ""
     try:
@@ -309,8 +326,13 @@ def action_tim_imdb():
     js = response.json()
 
     info_types: list[str] = ["goofs", "trivia", "quotes"]
-    api_movie = random.choice([movie for movie in js["movies"] if
-                               movie["status"].lower() == "watched" or movie["imdb"]["title"] == "Airplane!"])
+    api_movie = random.choice(
+        [
+            movie
+            for movie in js["movies"]
+            if movie["status"].lower() == "watched" or movie["imdb"]["title"] == "Airplane!"
+        ]
+    )
     c = Cinemagoer()
     imdb_movie = c.get_movie(api_movie["imdb"]["id"])
     c.update(imdb_movie, info_types)
@@ -333,7 +355,7 @@ def action_tim_imdb():
 
         info_text = escape_markdown(info_text)
         movie_text = escape_markdown(api_movie["imdb"]["title"])
-        text = fr"""||
+        text = rf"""||
 {info_text}
 ||
 \- {movie_text} \({info_type}\)
@@ -344,13 +366,18 @@ def action_tim_imdb():
 
 @actions.add(weight=10, message_type=MessageType.Photo)
 def action_apininjas_cats():
-    MAX_OFFSET = 62  # experimentally checked that there are 82 available items and 20 items are returned by default
+    MAX_OFFSET = (
+        62  # experimentally checked that there are 82 available items and 20 items are returned by default
+    )
     random_offset = random.randint(0, MAX_OFFSET)
-    api = ApiNinjas("cats", {
-        "limit": 20,
-        "min_weight": 1,  # arbitrary key since at least one filter has to be set
-        "offset": random_offset,
-    })
+    api = ApiNinjas(
+        "cats",
+        {
+            "limit": 20,
+            "min_weight": 1,  # arbitrary key since at least one filter has to be set
+            "offset": random_offset,
+        },
+    )
 
     try:
         res = api.get()
@@ -381,9 +408,12 @@ def action_the_cat_api():
 
 @actions.add(weight=10, message_type=MessageType.Photo)
 def action_nasa_apod():
-    api = NasaApi("/planetary/apod", {
-        "count": 1,
-    })
+    api = NasaApi(
+        "/planetary/apod",
+        {
+            "count": 1,
+        },
+    )
 
     try:
         res = api.get()
@@ -393,10 +423,12 @@ def action_nasa_apod():
     if res:
         image = res[0]
         url = image.get("hdurl") or image.get("url")
-        caption = escape_markdown(f"""{image["title"]} ({image['date']}):
+        caption = escape_markdown(
+            f"""{image["title"]} ({image['date']}):
 
 {image["explanation"]}
-""")
+"""
+        )
         return PhotoMessage(url, caption)
 
 
@@ -458,12 +490,14 @@ def action_spacex():
 @actions.add(weight=10, message_type=MessageType.Photo)
 def action_beemovie():
     from . import beemovie
+
     return TextMessage(escape_markdown(beemovie.SCRIPT))
 
 
 @actions.add(weight=10, message_type=MessageType.Photo)
 def action_xkcd():
     from .xkcd import Xkcd
+
     try:
         response = Xkcd().get_random()
     except RequestError as e:
