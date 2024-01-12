@@ -114,7 +114,7 @@ def get_stations() -> Optional[list[Station]]:
 
     soup = BeautifulSoup(response.text, "html.parser")
     out = soup.find_all("table")
-    table = out[1]
+    table = out[0]
     body = table.find("tbody")
     rows = body.find_all("tr")
 
